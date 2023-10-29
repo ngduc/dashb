@@ -1,0 +1,42 @@
+.form-wrapper {
+  display: flex;
+}
+
+form {
+  width: 40%;
+}
+
+.error {
+  color: red;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  place-self: end;
+}
+
+.form-control-item {
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: auto auto;
+  justify-items: flex-start;
+  margin-bottom: 15px;
+}
+
+input,
+select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+label {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  text-align: left;
+}
+
+.control {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  width: 100%;
+}

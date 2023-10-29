@@ -1,0 +1,22 @@
+{
+  "info": {
+    "wid": "stock",
+    "name": "Stock Chart",
+    "thumbnail": "https://i.ibb.co/fxFNMm3/localhost-5300-3.png"
+  },
+  "schema": {
+    "symbol": {
+      "label": "Symbol",
+      "type": "text",
+      "autoFocus": true,
+      "validation": {
+        "required": "Symbol is required",
+        "minLength": {
+          "value": 1,
+          "message": "Symbol should have at least 1 character"
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,17 @@
+{
+  "info": {
+    "wid": "lofi",
+    "name": "Lofi Music",
+    "thumbnail": "https://i.ibb.co/qM18zb6/localhost-5300-2.png"
+  },
+  "schema": {
+    "urls": {
+      "label": "URLs",
+      "type": "textarea",
+      "autoFocus": true,
+      "validation": {
+        "required": "URL is required"
+      }
+    }
+  }
+}

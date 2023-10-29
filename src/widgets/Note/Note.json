@@ -1,0 +1,40 @@
+{
+  "info": {
+    "wid": "note",
+    "name": "Note",
+    "thumbnail": ""
+  },
+  "schema": {
+    "total": {
+      "label": "Number of Notes",
+      "type": "select",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    "title0": {
+      "label": "Note Title 1",
+      "type": "text",
+      "autoFocus": true
+    },
+    "title1": {
+      "label": "Note Title 2",
+      "type": "text"
+    },
+    "title2": {
+      "label": "Note Title 3",
+      "type": "text"
+    }
+  }
+}

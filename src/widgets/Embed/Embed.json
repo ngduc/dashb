@@ -1,0 +1,22 @@
+{
+  "info": {
+    "wid": "embed",
+    "name": "Embed",
+    "thumbnail": "https://i.ibb.co/3SRHnw1/image.png"
+  },
+  "schema": {
+    "url": {
+      "label": "URL",
+      "type": "text",
+      "autoFocus": true,
+      "className": "w-full",
+      "validation": {
+        "required": "URL is required",
+        "minLength": {
+          "value": 1,
+          "message": "URL should have at least 1 character"
+        }
+      }
+    }
+  }
+}

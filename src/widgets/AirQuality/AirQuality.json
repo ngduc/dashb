@@ -1,0 +1,20 @@
+{
+  "info": {
+    "wid": "airq",
+    "name": "Air Quality"
+  },
+  "schema": {
+    "city": {
+      "label": "City",
+      "type": "text",
+      "autoFocus": true,
+      "validation": {
+        "required": "City is required",
+        "minLength": {
+          "value": 1,
+          "message": "City should have at least 1 character"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "info": {
+    "wid": "weather",
+    "name": "Weather",
+    "thumbnail": "https://i.ibb.co/b2PMvkj/localhost-5300-1.png"
+  },
+  "schema": {
+    "city": {
+      "label": "City",
+      "type": "text",
+      "autoFocus": true,
+      "validation": {
+        "required": "City is required",
+        "minLength": {
+          "value": 1,
+          "message": "City should have at least 1 character"
+        }
+      }
+    },
+    "days": {
+      "label": "Days",
+      "type": "select",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        }
+      ],
+      "validation": {
+        "required": "Days is required"
+      }
+    },
+    "hourly": {
+      "label": "Hourly",
+      "type": "checkbox"
+    }
+  }
+}
