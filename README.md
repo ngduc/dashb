@@ -35,7 +35,7 @@ Create your own widget and publish it for everyone to use. Please open one PR pe
 #### Embed widget
 
 - Some examples: embed news, forum posts, any web page, etc.
-- News sources:
+- News sources: (use these URLs in the widget settings)
   - Hacker News - Weekly: https://hn.algolia.com/?dateRange=pastWeek&page=0&prefix=false&query=&sort=byPopularity&type=story
   - Reddit Webdev Top Posts: https://feed.mikle.com/widget/v2/164076/?preloader-text=Loading&
 
