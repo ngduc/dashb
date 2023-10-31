@@ -1,5 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import nightwind from 'nightwind/helper';
+import { getLS, logOut } from '../utils/appUtils';
+import { PubSubEvent, usePub, useSub } from '../hooks/usePubSub';
+import { Dropdown } from './base';
+import { useState } from 'react';
+import TutorialModal from './TutorialModal/TutorialModal';
 
 type BaseProps = {
   children?: any;
@@ -38,25 +43,77 @@ export const Icons = {
 export default function AppHeader() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const publish = usePub();
+  const [mainKey, setMainKey] = useState('main');
+  const [tutorialShowed, setTutorialShowed] = useState(getLS('tutorialShowed', ''));
+
+  const lsUser = getLS('user', {}, true);
+
+  useSub(PubSubEvent.SignInDone, (user: any) => {
+    setMainKey(user.id);
+  });
 
   return (
-    <header className="py-4 flex items-center justify-between border-b border-gray-700 font-medium text-lg">
+    <header
+      key={mainKey}
+      className="py-4 flex items-center justify-between border-b border-gray-100 font-medium text-lg"
+    >
       <h1 className={`ml-2 cursor-pointer flex items-center`} onClick={() => navigate('/')}>
-        <span className="text-3xl ml-2 mr-2 lg:block hidden">🔣</span> Dashb
+        <span className="text-3xl ml-2 mr-2 lg:block hidden">
+          <img src="/logo.png" className="w-8" />
+        </span>{' '}
+        Dashb
         <span className="text-gray-300">.io</span>
       </h1>
       <div className="flex gap-6">
-        <Link to="/" className={`${pathname === '/' && 'underline'}`}>
-          Home
+        <Link to="/" className={`underlineLink ${pathname === '/' && 'underlineLinkActive'}`}>
+          Main
         </Link>
-        <Link to="/more" className={`${pathname === '/more' && 'underline'}`}>
+        <Link to="/more" className={`underlineLink ${pathname === '/more' && 'underlineLinkActive'}`}>
           More
         </Link>
       </div>
 
-      <button className="text-lg mr-4" onClick={() => nightwind.toggle()}>
-        <Icons.Brightness />
-      </button>
+      <div className="flex items-center">
+        <Dropdown label={lsUser.name ?? 'User'} className="text-sm" ulClassName="ml-[-40px]">
+          <button
+            className="text-sm link-minor w-28 bg-gray-100 hover:bg-gray-300 py-2 px-4 block whitespace-no-wrap cursor-pointer"
+            onClick={() => setTutorialShowed('')}
+          >
+            Tutorial
+          </button>
+          <button
+            className="text-sm link-minor w-28 bg-gray-100 hover:bg-gray-300 py-2 px-4 block whitespace-no-wrap cursor-pointer"
+            onClick={() => publish(PubSubEvent.SignIn, {})}
+          >
+            Sign in
+          </button>
+          <button
+            className="text-sm link-minor w-28 bg-gray-100 hover:bg-gray-300 py-2 px-4 block whitespace-no-wrap cursor-pointer"
+            onClick={() => logOut()}
+          >
+            Log out
+          </button>
+        </Dropdown>
+        <button
+          className="text-lg mr-4"
+          onClick={() => {
+            nightwind.toggle();
+            publish(PubSubEvent.ThemeChange, {});
+          }}
+        >
+          <Icons.Brightness />
+        </button>
+      </div>
+
+      {!tutorialShowed && (
+        <TutorialModal
+          onConfirm={() => {
+            localStorage.setItem('tutorialShowed', '1');
+            setTutorialShowed('1');
+          }}
+        />
+      )}
     </header>
   );
 }

@@ -4,7 +4,10 @@ import { EventEmitter } from 'eventemitter3';
 const emitter = new EventEmitter();
 
 export const PubSubEvent = {
-  Delete: 'Delete'
+  Delete: 'Delete',
+  ThemeChange: 'ThemeChange',
+  SignIn: 'SignIn',
+  SignInDone: 'SignInDone'
 };
 
 export const useSub = (event: string, callback: any) => {

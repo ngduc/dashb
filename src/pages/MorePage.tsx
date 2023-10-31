@@ -20,12 +20,13 @@ export default function MorePage(props: any) {
   };
 
   return (
-    <div className="p-4">
-      <div>Multiple Tabs is a part of Advanced Plan. Subscribe to get your Advanced Plan.</div>
+    <div className="p-4 text-center">
+      <div>Multiple Tabs is a part of Advanced Plan, including more widgets.</div>
+      <div>Subscribe to get your Advanced Plan.</div>
 
-      <div className="mt-4 flex flex-col items-center p-4 border-[1px] rounded-md text-black bg-gray-100">
-        <form className="w-full lg:flex items-center" onSubmit={onSubmitSubscriber}>
-          <div className="mr-2">Get your free premium account:</div>
+      <div className="mt-4 flex flex-col items-center p-4 text-black bg-gray-100">
+        <form className="w-full lg:flex items-center justify-center" onSubmit={onSubmitSubscriber}>
+          <span className="mr-2">Get your Advanced Plan:</span>
           <input
             placeholder="youremail@example.com"
             className="border-2 rounded-md mr-2 px-2 py-1 w-60 text-white"

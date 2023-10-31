@@ -19,13 +19,7 @@ export default function Weather({ wid, defaultCity }: Props) {
 
   async function search(city: string) {
     let apiUrl = `/api/weather/data?wid=${wid}&city=${city}`;
-    const { data } = await apiGet(apiUrl, {
-      options: {
-        headers: {
-          authorization: `Bearer ${jwtToken}`
-        }
-      }
-    });
+    const { data } = await apiGet(apiUrl, {});
     const info = data.data;
     setWeatherdData({
       ready: true,
@@ -56,7 +50,7 @@ export default function Weather({ wid, defaultCity }: Props) {
           <>
             {weatherData.ready && (
               <div className="text-center">
-                <WeatherInfo data={weatherData} />
+                <WeatherInfo settings={settings} data={weatherData} />
                 <WeatherForecast
                   settings={settings}
                   days={parseInt(settings?.days ?? 4)}

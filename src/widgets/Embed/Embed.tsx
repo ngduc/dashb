@@ -13,9 +13,7 @@ export default function Embed({ wid }: Props) {
   // memo: to avoid re-rendering (when moving widget)
   const IFrame = memo(() => {
     return (
-      <div>
-        <iframe width={WidgetWidth} height={WidgetHeight * 2} src={currentUrl} className="bg-black"></iframe>
-      </div>
+      <iframe width={WidgetWidth} height={WidgetHeight * 2} src={currentUrl} className="bg-black rounded-md"></iframe>
     );
   });
 
@@ -25,7 +23,7 @@ export default function Embed({ wid }: Props) {
       schema={json.schema}
       w={1}
       h={2}
-      cn=""
+      cn="rounded-md"
       onSettings={({ settings }) => {
         setCurrentUrl(settings?.url ?? '');
       }}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Modal } from '..';
-import { Widget, widgetList } from '../../../widgets';
+import { widgetList } from '../../../widgets';
+import { Widget } from '../../../../types';
 
 type Props = {
   onConfirm: (widget: Widget | null) => void;
@@ -21,14 +22,14 @@ export default function AddWidgetModal({ onConfirm, onCancel }: Props) {
       bodyClassName="!max-w-[80%]"
       content={
         <div>
-          <h3>Select Widget</h3>
+          <h3>Select a Widget</h3>
           <ul className="flex flex-wrap mt-2 gap-4 max-h-[400px] overflow-y-scroll">
             {widgetList.map((widget) => {
-              console.log('widget', widget);
+              // console.log('widget', widget);
               return (
                 <li
                   key={widget?.info?.wid ?? ''}
-                  className={`relative w-48 h-32 border-[1px] border-gray-100 hover:border-gray-300 cursor-pointer`}
+                  className={`relative w-48 h-32 rounded-md border-[1px] border-gray-100 hover:border-gray-300 cursor-pointer`}
                   onClick={() => onClickWidget(widget)}
                   style={{
                     background: `url(${(widget as any)?.info?.thumbnail}) no-repeat center center`,

@@ -3,6 +3,7 @@ import { MiniChart, SymbolOverview } from 'react-tradingview-embed';
 import json from './StockMini.json';
 import Widget from '../../components/Widget/Widget';
 import { WidgetWidth } from '../../utils/constants';
+import { PubSubEvent, useSub } from '../../hooks/usePubSub';
 
 type Props = {
   wid: string;
@@ -11,15 +12,20 @@ type Props = {
 
 export default function StockMini({ wid, symbol }: Props) {
   const [currentSymbol, setCurrentSymbol] = useState(symbol);
+  const [theme, setTheme] = useState(localStorage.getItem('nightwind-mode') ?? 'dark');
+  useSub(PubSubEvent.ThemeChange, () => {
+    setTheme(localStorage.getItem('nightwind-mode') ?? 'dark');
+  });
 
   // memo: to avoid re-rendering (when moving widget)
   const Chart = memo(() => {
     return (
       <MiniChart
+        key={wid + '-' + theme}
         widgetProps={{
           width: WidgetWidth,
           symbol: currentSymbol,
-          colorTheme: localStorage.getItem('nightwind-mode') ?? 'dark'
+          colorTheme: theme
         }}
       />
     );

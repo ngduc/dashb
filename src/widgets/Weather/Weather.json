@@ -57,6 +57,10 @@
     "hourly": {
       "label": "Hourly",
       "type": "checkbox"
+    },
+    "useFahrenheit": {
+      "label": "Use Fahrenheit?",
+      "type": "checkbox"
     }
   }
 }

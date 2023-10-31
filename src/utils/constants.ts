@@ -34,12 +34,6 @@ export const DefaultWidgets = [
     wid: 'stock-01'
   },
   {
-    wid: 'toggl-01'
-  },
-  // {
-  //   wid: 'embed-01'
-  // },
-  {
     wid: 'lofi-01'
   },
   {
@@ -50,8 +44,6 @@ export const DefaultLayout = [
   { i: 'weather-01', x: 0, y: 0, w: 1, h: 1 },
   { i: 'airq-01', x: 1, y: 0, w: 1, h: 1 },
   { i: 'stock-01', x: 1, y: 0, w: 1, h: 2 },
-  { i: 'toggl-01', x: 0, y: 0, w: 1, h: 2 },
-  // { i: 'embed-01', x: 0, y: 0, w: 1, h: 2 },
   { i: 'lofi-01', x: 0, y: 0, w: 1, h: 1 },
   { i: 'note-01', x: 0, y: 0, w: 1, h: 1 }
 ];

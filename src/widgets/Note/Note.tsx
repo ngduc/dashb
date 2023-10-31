@@ -34,7 +34,7 @@ export default function Note({ wid }: Props) {
       setSettings(newSettings);
     }
     if (skipSaving) {
-      console.log('reset skipSaving', skipSaving);
+      // console.log('reset skipSaving', skipSaving);
       setTimeout(() => setSkipSaving(false), 200);
     }
   }, [debouncedText]);
@@ -49,7 +49,7 @@ export default function Note({ wid }: Props) {
       schema={json.schema}
       w={1}
       h={1}
-      cn="overflow-hidden"
+      cn="overflow-hidden rounded-md"
       onSettings={({ settings, isSubmitted }) => {
         if (isSubmitted) {
           setSettings(settings);
@@ -62,7 +62,7 @@ export default function Note({ wid }: Props) {
         const arrNotes = Array(parseInt(settings?.total ?? '1')).fill(0);
         return (
           <div key={`el_${noteIndex}`} className="w-full h-full relative flex flex-col">
-            {isSaving && <span className="absolute right-2 top-2 w-2 h-2 bg-green-100 rounded-full"></span>}
+            {isSaving && <span className="absolute right-2 top-2 w-2 h-2 bg-green-300 rounded-full"></span>}
             <textarea
               defaultValue={settings?.[`text${noteIndex}`]}
               onChange={onChange}
@@ -75,19 +75,20 @@ export default function Note({ wid }: Props) {
                 return (
                   <li
                     key={idx}
+                    data-idx={idx}
                     className={`px-2 py-1 cursor-pointer hover:text-gray-500 ${noteIndex === idx && 'bg-gray-100'}`}
-                    onClick={() => {
+                    onClick={(ev: any) => {
                       if (!isSaving) {
-                        setSettings((currentSettings) => {
-                          return {
-                            ...currentSettings,
-                            [`text${noteIndex}`]: text
-                          };
-                        });
+                        // save current tab => this messed up all tabs
+                        // setSettings((currentSettings) => {
+                        //   return {
+                        //     ...currentSettings,
+                        //     [`text${noteIndex}`]: text
+                        //   };
+                        // });
                         setText(settings[`text${idx}`]);
                         setSkipSaving(true);
                         setNoteIndex(idx);
-                        // setText(settings[`text${idx}`]);
                       }
                     }}
                   >

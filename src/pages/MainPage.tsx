@@ -9,15 +9,15 @@ import GridLayout, { WidthProvider, Responsive } from 'react-grid-layout';
 import Embed from '../widgets/Embed/Embed';
 import LofiPlayer from '../widgets/LofiPlayer/LofiPlayer';
 import Note from '../widgets/Note/Note';
-import { Widget } from '../widgets';
 import AddWidgetModal from '../components/base/AddWidgetModal/AddWidgetModal';
 import { PubSubEvent, useSub } from '../hooks/usePubSub';
-import { getLS } from '../utils/appUtils';
+import { generateWID, getLS } from '../utils/appUtils';
 import { DefaultLayout, DefaultWidgets } from '../utils/constants';
 import { deleteSettings } from '../hooks/useWidgetSettings';
 import StockMini from '../widgets/StockMini/StockMini';
 import { saveTabDB, saveTabLS } from './MainPageUtils';
 import { apiGet } from '../utils/apiUtils';
+import { UserWidget, Widget } from '../../types';
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 export default function MainPage() {
@@ -33,19 +33,13 @@ export default function MainPage() {
       setIsReady(false);
       const token = localStorage.getItem('tk') ?? '';
       if (token) {
-        const { data } = await apiGet('/api/user/settings', {
-          options: {
-            headers: {
-              authorization: `Bearer ${localStorage.getItem('tk')}`
-            }
-          }
-        });
-        const newWidgets = data.userWidgets.length > 0 ? data.userWidgets : DefaultWidgets;
-        const newLayout = data.userLayout.length > 0 ? data.userLayout : DefaultLayout;
+        const { data } = await apiGet('/api/user/settings', {});
+        const newWidgets = (data?.userWidgets ?? []).length > 0 ? data.userWidgets : DefaultWidgets;
+        const newLayout = (data?.userLayout ?? []).length > 0 ? data.userLayout : DefaultLayout;
         saveTabLS(0, newWidgets, newLayout);
         setUserWidgets(newWidgets);
         setLayout(newLayout);
-        console.log('-- isReady', data);
+        // console.log('-- isReady', data);
       }
       setIsReady(true);
     };
@@ -56,7 +50,7 @@ export default function MainPage() {
   useSub(PubSubEvent.Delete, async (wid: string) => {
     if (confirm('Delete this widget?') === true) {
       const newLayout = layout.filter((item: any) => item.i !== wid);
-      const newUserWidgets = userWidgets.filter((item: Widget) => item?.info?.wid !== wid);
+      const newUserWidgets = userWidgets.filter((item: UserWidget) => item.wid !== wid);
       setLayout([...newLayout]);
       setUserWidgets([...newUserWidgets]);
       saveTabLS(tab, newUserWidgets, newLayout);
@@ -68,7 +62,7 @@ export default function MainPage() {
     setModalShowed(false);
     // console.log('widget', widget);
     if (widget) {
-      const wid = widget?.info?.wid + '-' + Math.random();
+      const wid = widget?.info?.wid + '-' + generateWID();
       userWidgets.push({
         wid
       });
@@ -79,13 +73,35 @@ export default function MainPage() {
   };
   return (
     <ProtectedPage>
-      <div>
+      <div
+      // style={{
+      //   background: `url(https://as1.ftcdn.net/v2/jpg/05/72/26/54/1000_F_572265495_aMlExbdRAhNxoFYv6RT12HB6TRtoGok5.jpg)`,
+      //   backgroundSize: 'cover'
+      // }}
+      >
         {isReady && userWidgets.length > 0 && layout.length > 0 && (
-          <GridLayout
+          // <GridLayout
+          //   draggableHandle=".draggableHandle"
+          //   className="layout"
+          //   layout={layout}
+          //   cols={4}
+          //   rowHeight={200}
+          //   width={1600}
+          //   margin={[20, 20]}
+          //   onLayoutChange={(layout) => {
+          //     saveTabLS(tab, userWidgets, layout);
+          //     saveTabDB(tab, userWidgets, layout);
+          //   }}
+          //   isResizable={false}
+          // >
+          <ResponsiveGridLayout
             draggableHandle=".draggableHandle"
             className="layout"
-            layout={layout}
-            cols={4}
+            // layout={layout}
+            layouts={{ lg: layout }}
+            // cols={4}
+            breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+            cols={{ lg: 4, md: 3, sm: 2, xs: 1, xxs: 1 }}
             rowHeight={200}
             width={1600}
             margin={[20, 20]}
@@ -144,7 +160,7 @@ export default function MainPage() {
                   );
                 case 'toggl':
                   return (
-                    <div key={wid} className={cn}>
+                    <div key={wid} className={cn} data-grid={{ x: 0, y: 0, w: 1, h: 2 }}>
                       <Toggl key={`${wid}-main`} wid={wid} />
                     </div>
                   );
@@ -156,13 +172,22 @@ export default function MainPage() {
                   );
               }
             })}
-          </GridLayout>
+          </ResponsiveGridLayout>
         )}
       </div>
 
-      <button className="btn ml-4 mb-4" onClick={() => setModalShowed(true)}>
-        Add Widget
-      </button>
+      <div>
+        <button className="btn ml-4 mb-4" onClick={() => setModalShowed(true)}>
+          Add Widget
+        </button>
+      </div>
+
+      <footer className="ml-4 mt-2 text-sm">
+        Dashb.io -{' '}
+        <a href="https://github.com/ngduc/dashb" target="_blank" className="link-minor">
+          Read more on Github
+        </a>
+      </footer>
 
       {modalShowed && <AddWidgetModal onCancel={() => setModalShowed(false)} onConfirm={addWidget} />}
     </ProtectedPage>

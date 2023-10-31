@@ -20,7 +20,7 @@ export default function AirQuality({ wid }: Props) {
     const { data } = await apiGet(
       `https://api.waqi.info/search/?token=2d71850fc24edb7443b5922b70f3587eabb14119&keyword=${name}`
     );
-    setStations(data.data);
+    setStations(data?.data ?? []);
   };
 
   const fetchStationData = async (stationId: string) => {
@@ -29,7 +29,7 @@ export default function AirQuality({ wid }: Props) {
         `https://api.waqi.info/feed/@${stationId}/?token=2d71850fc24edb7443b5922b70f3587eabb14119`
       );
       // console.log('--- fetchStations data', data);
-      setStationData(data.data);
+      setStationData(data?.data ?? []);
     }
   };
 

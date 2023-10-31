@@ -2,8 +2,9 @@ import axios, { AxiosInstance } from 'axios';
 import useSWR from 'swr';
 import qs from 'query-string';
 import { UI_API_BASE } from './constants';
+import { getLS } from './appUtils';
 
-// v5: 2023-10: add options for apiPost, apiDelete
+// v5: 2023-10: add options for apiPost, apiDelete; add getAuthHeader;
 // v4: 2023-09: in url: use '@' for UI_API_BASE
 // v3: 2022-03: use SWR, useFetch hook
 // v2: 2022-01: added ApiParams, cache.
@@ -15,6 +16,16 @@ const buildQueryString = (queryObj: any) => (queryObj ? '?' + qs.stringify(query
 const axiosApi: AxiosInstance = axios.create({
   headers: {}
 });
+
+function getAuthHeader(noAuth: boolean | undefined) {
+  const token = getLS('tk', '', false);
+  if (!token || noAuth === true) {
+    return {};
+  }
+  return {
+    authorization: `Bearer ${token}`
+  };
+}
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -35,6 +46,7 @@ interface ApiParams {
   payload?: any;
   options?: any;
   noCache?: boolean;
+  noAuth?: boolean;
   [key: string]: any;
 }
 
@@ -48,11 +60,10 @@ export const apiGet = async (path: string, params?: ApiParams) => {
     return cache[url].content;
   }
   try {
-    const authHeaders = {};
     const { data, status } = await axiosApi({
       url: path.startsWith('http') ? path : url,
       method: 'GET',
-      headers: authHeaders,
+      headers: path.startsWith('http') ? {} : getAuthHeader(params?.noAuth),
       ...params?.options
     });
     cache[url] = { content: { data, status } }; // cache output
@@ -74,7 +85,7 @@ export const apiPost = async (path: string, params?: ApiParams) => {
     const { data, status } = await axiosApi({
       url,
       method: 'POST',
-      headers: {},
+      headers: path.startsWith('http') ? {} : getAuthHeader(params?.noAuth),
       data: params?.payload,
       ...params?.options
     });
@@ -95,7 +106,7 @@ export const apiDelete = async (path: string, params?: ApiParams) => {
     const obj = {
       url,
       method: 'DELETE',
-      headers: {},
+      headers: path.startsWith('http') ? {} : getAuthHeader(params?.noAuth),
       ...params?.options
     };
     console.log('obj', obj);

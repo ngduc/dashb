@@ -5,12 +5,12 @@ import { cToF } from './weatherUtils';
 export default function WeatherForecastDay(props: any) {
   function maxTemperature() {
     let temperature = Math.round(props.data.temp.max);
-    return `${Math.round(cToF(temperature))}°`;
+    return `${props.useFahrenheit ? Math.round(cToF(temperature)) : Math.round(temperature)}°`;
   }
 
   function minTemperature() {
     let temperature = Math.round(props.data.temp.min);
-    return `${Math.round(cToF(temperature))}°`;
+    return `${props.useFahrenheit ? Math.round(cToF(temperature)) : Math.round(temperature)}°`;
   }
 
   function day() {

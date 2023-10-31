@@ -107,13 +107,15 @@ export const Button = ({
 /* <Dropdown label={'name'}><Child1 />...</Dropdown> */
 type DropdownProps = BaseProps & {
   label?: React.ReactElement | string;
-  itemClassName?: string;
+  ulClassName?: string;
+  liClassName?: string;
   onSelect?: (ev: React.MouseEvent<HTMLElement>) => void;
 };
 export const Dropdown = ({
   className,
   label = 'label',
-  itemClassName,
+  ulClassName,
+  liClassName,
   onSelect,
   children,
   ...others
@@ -127,12 +129,12 @@ export const Dropdown = ({
             <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />{' '}
           </svg>
         </button>
-        <ul className={`${styles.dropdownMenu} absolute hidden text-gray-700 pt-1 z-10`}>
+        <ul className={`${styles.dropdownMenu} absolute hidden text-gray-700 pt-1 z-10 ${ulClassName ?? ''}`}>
           {React.Children.map(children, (child: any, idx) => (
-            <li key={idx} className={itemClassName} onClick={(ev) => (onSelect ? onSelect(ev) : '')}>
-              <span className="bg-gray-100 hover:bg-gray-300 py-2 px-4 block whitespace-no-wrap cursor-pointer">
-                {child}
-              </span>
+            <li key={idx} className={liClassName} onClick={(ev) => (onSelect ? onSelect(ev) : '')}>
+              {/* <span className="bg-gray-100 hover:bg-gray-300 py-2 px-4 block whitespace-no-wrap cursor-pointer"> */}
+              {child}
+              {/* </span> */}
             </li>
           ))}
         </ul>

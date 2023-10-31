@@ -3,20 +3,15 @@ import { apiDelete, apiGet, apiPost } from '../utils/apiUtils';
 import { KeyValueString } from '../../types';
 import { useAppContext } from './useAppContext';
 import { getSettingsApiUrl } from '../utils/constants';
+import { logOut } from '../utils/appUtils';
 
 const fetchSettings = async (jwtToken: string, wid: string) => {
   const { data, error } = await apiGet(getSettingsApiUrl(0, wid), {
-    options: {
-      headers: {
-        authorization: `Bearer ${jwtToken}`
-      }
-    },
     noCache: true
   });
   if (error) {
     // jwtToken expired, etc.
-    localStorage.removeItem('tk');
-    window.location.reload(); // logout & reload
+    logOut();
   } else {
     return data.settings;
   }
@@ -43,17 +38,11 @@ export const useWidgetSettings = (wid: string, callback: (settings: KeyValueStri
 
   const saveSettings = async (settings: KeyValueString) => {
     const { data, error, status } = await apiPost(getSettingsApiUrl(0, wid), {
-      options: {
-        headers: {
-          authorization: `Bearer ${jwtToken}`
-        }
-      },
       payload: settings
     });
     if (error) {
       if (status === 403) {
-        localStorage.removeItem('tk');
-        window.location.reload(); // log out
+        logOut();
       }
     }
     return { data, error };
@@ -64,11 +53,5 @@ export const useWidgetSettings = (wid: string, callback: (settings: KeyValueStri
 
 export async function deleteSettings(wid: string) {
   const jwtToken = localStorage.getItem('tk');
-  return apiDelete(getSettingsApiUrl(0, wid), {
-    options: {
-      headers: {
-        authorization: `Bearer ${jwtToken}`
-      }
-    }
-  });
+  return apiDelete(getSettingsApiUrl(0, wid), {});
 }

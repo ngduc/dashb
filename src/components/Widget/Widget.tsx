@@ -34,7 +34,7 @@ export default function Widget({ wid, schema, w, h, cn, render, onSettings }: Pr
   return (
     <div
       // border-2 border-gray-100 rounded-md
-      className={cn ? `relative ${cn}` : `relative overflow-hidden overflow-y-scroll`}
+      className={`relative overflow-hidden overflow-y-scroll ${cn ?? ''}`}
       style={{ width: WidgetWidth * w, height: WidgetHeight * h }}
     >
       <div

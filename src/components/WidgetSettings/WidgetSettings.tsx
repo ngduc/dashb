@@ -84,7 +84,7 @@ export default function WidgetSettings({ wid, schema, onSubmit }: Props) {
               {...register(key)}
               name={key}
               onChange={handleInputChange}
-              className="text-white"
+              className="text-gray-400"
               defaultValue={settings?.key}
             >
               {/* Options for select dropdown */}

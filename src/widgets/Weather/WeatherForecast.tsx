@@ -20,13 +20,7 @@ export default function WeatherForecast(props: any) {
     let latitude = props.coordinates.lat;
     const apiUrl = `/api/weather/onecall?lat=${latitude}&lon=${longitude}`;
 
-    const { data } = await apiGet(apiUrl, {
-      options: {
-        headers: {
-          authorization: `Bearer ${jwtToken}`
-        }
-      }
-    });
+    const { data } = await apiGet(apiUrl, {});
     setForecast(data.data.daily);
 
     const arr: any = [];
@@ -47,7 +41,7 @@ export default function WeatherForecast(props: any) {
             if (index < props.days) {
               return (
                 <div className="col" key={index}>
-                  <WeatherForecastDay data={dailyForecast} />
+                  <WeatherForecastDay useFahrenheit={props?.settings?.useFahrenheit ?? false} data={dailyForecast} />
                 </div>
               );
             } else {
@@ -69,7 +63,7 @@ export default function WeatherForecast(props: any) {
                     .replace(/:00:00/g, '')
                     .split(',')[1] +
                     ' ' +
-                    Math.round(cToF(item.temp)) +
+                    (props?.settings?.useFahrenheit ? Math.round(cToF(item.temp)) : Math.round(item.temp)) +
                     '°'}
                 </span>
               );

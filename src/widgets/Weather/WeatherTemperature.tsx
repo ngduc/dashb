@@ -1,7 +1,12 @@
 import React, { MouseEvent, useState } from 'react';
 import { cToF } from './weatherUtils';
 
-export default function WeatherTemperature({ celsius }: { celsius: number }) {
+type Props = {
+  celsius: number;
+  useFahrenheit: boolean;
+};
+
+export default function WeatherTemperature({ celsius, useFahrenheit }: Props) {
   const [unit, setUnit] = useState('fahrenheit');
 
   // function showFahrenheit(event: MouseEvent) {
@@ -29,7 +34,7 @@ export default function WeatherTemperature({ celsius }: { celsius: number }) {
   } else {
     return (
       <div className="WeatherTemperature ml-2">
-        <span className="temperature">{Math.round(cToF(celsius))}</span>
+        <span className="temperature">{useFahrenheit ? Math.round(cToF(celsius)) : Math.round(celsius)}</span>
         {/* <span className="unit">
           <a href="/" onClick={showCelsius}>
             ℃
