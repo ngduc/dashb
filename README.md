@@ -1,6 +1,8 @@
 # Dashb
 
-Dashb.io site
+Dashb.io - Widgets and Dashboards Reimagined.
+
+[Dashboard Examples](./examples.md)
 
 ## Scripts
 
@@ -25,7 +27,7 @@ $ npm run dev
 - [x] Toggl
 - [x] Weather
   - Daily, hourly weather information.
-- [ ] Quotes
+- [x] Quotes
 - [ ] Markdown Notes
 
 ### ...and your own Widget!
