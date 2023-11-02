@@ -11,7 +11,7 @@ $ npm run build
 $ npm run dev
 ```
 
-[<img src="https://i.ibb.co/4fm3FxR/Kapture-2023-10-31-at-08-37-17.gif">](https://i.ibb.co/4fm3FxR/Kapture-2023-10-31-at-08-37-17.gif)
+[<img src="./public/demo-01.gif">](public/demo-01.gif)
 
 ## Widgets
 
