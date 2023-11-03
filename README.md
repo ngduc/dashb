@@ -44,3 +44,7 @@ Create your own widget and publish it for everyone to use. Please open one PR pe
 #### Note widget
 
 - Note widget supports multiple notes or tabs. Click on its Settings to enable other tabs.
+
+## Links
+
+- [Blog: Keep Life Organized With Dashb.io: It changed my morning routine](https://dev.to/ngduc/keep-life-organized-with-dashbio-it-changed-my-morning-routine-2ogb)
