@@ -23,7 +23,7 @@ $ npm run dev
 - [x] Notes
   - Text note with multiple tabs.
 - [x] Quotes
-- [x] RSS Reader
+- [x] RSS News Reader - [Docs](./documentation/widget-rssreader.md)
   - Fetch news from RSS sources.
 - [x] StockChart
 - [x] StockMini
