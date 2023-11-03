@@ -8,3 +8,6 @@
 
 - Dashboard with different News sources
   <img src="dashb-example-03.png">
+
+- Use as a Personal Dashboard (for morning routines, quick glance of information)
+  <img src="demo-screens-01.jpg">
