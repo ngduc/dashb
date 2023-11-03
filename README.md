@@ -1,6 +1,6 @@
 # Dashb
 
-Dashb.io - Widgets and Dashboards Reimagined.
+Dashb.io - Minimalist's Dashboard and Widgets.
 
 [Dashboard Examples](./examples.md)
 
