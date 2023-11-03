@@ -47,8 +47,8 @@ export default function Note({ wid }: Props) {
     <Widget
       wid={wid}
       schema={json.schema}
-      w={1}
-      h={1}
+      w={json.info.w}
+      h={json.info.h}
       cn="overflow-hidden rounded-md"
       onSettings={({ settings, isSubmitted }) => {
         if (isSubmitted) {
@@ -59,7 +59,7 @@ export default function Note({ wid }: Props) {
         }
       }}
       render={() => {
-        const arrNotes = Array(parseInt(settings?.total ?? '1')).fill(0);
+        const arrNotes = Array(parseInt(settings?.total ?? '2')).fill(0);
         return (
           <div key={`el_${noteIndex}`} className="w-full h-full relative flex flex-col">
             {isSaving && <span className="absolute right-2 top-2 w-2 h-2 bg-green-300 rounded-full"></span>}
@@ -67,11 +67,12 @@ export default function Note({ wid }: Props) {
               defaultValue={settings?.[`text${noteIndex}`]}
               onChange={onChange}
               className="w-full h-full bg-gray-100 text-black p-2"
+              style={{ fontSize: parseInt(settings?.fontSize ?? '14') }}
             ></textarea>
 
             <ul className="flex bg-gray-50 text-sm">
               {arrNotes.map((item, idx) => {
-                const tabTitle = settings?.[`title${idx}`] || `Note ${idx}`;
+                const tabTitle = settings?.[`title${idx}`] || `Note ${idx + 1}`;
                 return (
                   <li
                     key={idx}

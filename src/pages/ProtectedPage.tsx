@@ -89,7 +89,17 @@ const ProtectedPage = (props: any) => {
   ) : (
     <div className="flex flex-col items-center">
       <div className="m-2">
+        {/* <button className="mt-2 p-2 btn" onClick={() => googleLogin()}>
+          Getting Started
+        </button> */}
       </div>
+
+      {/* <div className="m-2 mt-12 w-full flex flex-col items-center">
+        <h3>Start your morning routine with your Personal Dashboard and Widgets</h3>
+        <div className="m-2 p-2">
+          <img src="https://i.ibb.co/NNpqTQS/image.png" />
+        </div>
+      </div> */}
 
       <footer className="ml-2 mt-4 text-sm">
         {/* <hr className="border-gray-100" /> */}

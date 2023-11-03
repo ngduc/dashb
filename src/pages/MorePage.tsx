@@ -42,6 +42,27 @@ export default function MorePage(props: any) {
           >{`Submit`}</button>
         </form>
       </div>
+
+      <hr className="mt-8 border-gray-300" />
+
+      <div className="mt-8 flex flex-col gap-8">
+        <div>Below are some examples of Dashboards (Basic Plan)</div>
+
+        <div className="flex flex-col items-center justify-center">
+          <div>Dashboard with TODO notes, Weather, Air Quality, Stock index, News, Lofi music player</div>
+          <img src="/dashb-example-01.png" className="max-w-[95vw] lg:max-w-[50vw] border-2 border-gray-200 mt-2" />
+        </div>
+
+        <div className="flex flex-col items-center justify-center">
+          <div>Dashboard to monior Stock prices, Trading notes</div>
+          <img src="/dashb-example-02.png" className="max-w-[95vw] lg:max-w-[50vw] border-2 border-gray-200 mt-2" />
+        </div>
+
+        <div className="flex flex-col items-center justify-center">
+          <div>Dashboard with different News sources</div>
+          <img src="/dashb-example-03.png" className="max-w-[95vw] lg:max-w-[50vw] border-2 border-gray-200 mt-2" />
+        </div>
+      </div>
     </div>
   );
 }

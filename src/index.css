@@ -13,7 +13,7 @@
     @apply bg-blue-700;
   }
   .link-minor {
-    @apply text-gray-400 hover:text-gray-800;
+    @apply text-gray-400 hover:text-gray-800 cursor-pointer;
   }
 }
 

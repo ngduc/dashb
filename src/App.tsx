@@ -6,6 +6,7 @@ import AppHeader from './components/AppHeader';
 import './App.css';
 import MainPage from './pages/MainPage';
 import MorePage from './pages/MorePage';
+import { TermsPage } from './pages/TermsPage';
 
 const isDarkMode = (localStorage.getItem('nightwind-mode') ?? 'dark') === 'dark';
 if (isDarkMode) {
@@ -21,6 +22,7 @@ export default () => {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/more" element={<MorePage />} />
+          <Route path="/terms-of-service" element={<TermsPage />} />
 
           <Route path="profile" element={<ProtectedRoute>Protected Profile</ProtectedRoute>} />
         </Routes>

@@ -9,8 +9,12 @@ export default function TutorialModal({ onConfirm }: Props) {
       title="Tutorial"
       bodyClassName="!max-w-[800px]"
       content={
-        <div>
-          <img src="https://i.ibb.co/4fm3FxR/Kapture-2023-10-31-at-08-37-17.gif" />
+        <div className="flex flex-col gap-2">
+          <img src="/demo-01.gif" alt="Tutorial Screenshot" />
+
+          <a className="link-minor" href="https://github.com/ngduc/dashb/blob/main/examples.md" target="_blank">
+            See more Dashboard Examples
+          </a>
         </div>
       }
       onConfirm={onConfirm}

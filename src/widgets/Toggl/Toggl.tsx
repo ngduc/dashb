@@ -11,8 +11,8 @@ export default function Toggl({ wid }: Props) {
     <Widget
       wid={wid}
       schema={json.schema}
-      w={1}
-      h={2}
+      w={json.info.w}
+      h={json.info.h}
       cn=""
       onSettings={() => {}}
       render={() => {

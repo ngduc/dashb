@@ -6,7 +6,6 @@ export function saveTabLS(tab: number, userWidgets: any[], userLayout: any[]) {
 }
 
 export async function saveTabDB(tab: number, userWidgets: any[], userLayout: any[]) {
-  const jwtToken = localStorage.getItem('tk');
   const { error } = await apiPost('/api/user/settings', {
     payload: {
       tab: 0,

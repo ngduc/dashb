@@ -35,8 +35,8 @@ export default function StockMini({ wid, symbol }: Props) {
     <Widget
       wid={wid}
       schema={json.schema}
-      w={1}
-      h={1}
+      w={json.info.w}
+      h={json.info.h}
       cn="overflow-hidden"
       onSettings={({ settings }) => {
         setCurrentSymbol(settings?.symbol ?? symbol); // default to symbol prop if no settings

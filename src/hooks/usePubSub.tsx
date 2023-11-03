@@ -7,7 +7,9 @@ export const PubSubEvent = {
   Delete: 'Delete',
   ThemeChange: 'ThemeChange',
   SignIn: 'SignIn',
-  SignInDone: 'SignInDone'
+  SignInDone: 'SignInDone',
+  Moving: 'Moving',
+  MovingToast: 'MovingToast'
 };
 
 export const useSub = (event: string, callback: any) => {

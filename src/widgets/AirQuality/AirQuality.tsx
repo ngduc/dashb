@@ -49,8 +49,8 @@ export default function AirQuality({ wid }: Props) {
     <Widget
       wid={wid}
       schema={json.schema}
-      w={1}
-      h={1}
+      w={json.info.w}
+      h={json.info.h}
       cn="text-center"
       onSettings={async ({ settings, isSubmitted }) => {
         setSettings(settings);
@@ -65,7 +65,7 @@ export default function AirQuality({ wid }: Props) {
       }}
       render={() => {
         return (
-          <div className="">
+          <div className="p-2">
             {stationData?.city?.name ? (
               <div className="px-2">
                 <div>{stationData.city.name}</div>
@@ -76,7 +76,8 @@ export default function AirQuality({ wid }: Props) {
               </div>
             ) : (
               <>
-                <div>Air Quality - Select a Station:</div>
+                <div>Air Quality - Select a City Station:</div>
+                {stations?.length === 0 && <div>(Station not found. Change it in Settings)</div>}
                 {stations.map((item: any) => {
                   return (
                     <div

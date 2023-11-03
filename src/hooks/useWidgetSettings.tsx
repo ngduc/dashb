@@ -36,6 +36,8 @@ export const useWidgetSettings = (wid: string, callback: (settings: KeyValueStri
     fetch();
   }, []);
 
+  // ------------- helper functions ------------- //
+
   const saveSettings = async (settings: KeyValueString) => {
     const { data, error, status } = await apiPost(getSettingsApiUrl(0, wid), {
       payload: settings
@@ -52,6 +54,5 @@ export const useWidgetSettings = (wid: string, callback: (settings: KeyValueStri
 };
 
 export async function deleteSettings(wid: string) {
-  const jwtToken = localStorage.getItem('tk');
   return apiDelete(getSettingsApiUrl(0, wid), {});
 }

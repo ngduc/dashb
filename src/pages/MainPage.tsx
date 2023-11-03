@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import StockChart from '../widgets/StockChart/StockChart';
 import Weather from '../widgets/Weather/Weather';
 import ProtectedPage from './ProtectedPage';
 import AirQuality from '../widgets/AirQuality/AirQuality';
 import Toggl from '../widgets/Toggl/Toggl';
 
-import GridLayout, { WidthProvider, Responsive } from 'react-grid-layout';
+import { WidthProvider, Responsive, Layouts, Layout } from 'react-grid-layout';
 import Embed from '../widgets/Embed/Embed';
 import LofiPlayer from '../widgets/LofiPlayer/LofiPlayer';
 import Note from '../widgets/Note/Note';
 import AddWidgetModal from '../components/base/AddWidgetModal/AddWidgetModal';
-import { PubSubEvent, useSub } from '../hooks/usePubSub';
+import { PubSubEvent, usePub, useSub } from '../hooks/usePubSub';
 import { generateWID, getLS } from '../utils/appUtils';
 import { DefaultLayout, DefaultWidgets } from '../utils/constants';
 import { deleteSettings } from '../hooks/useWidgetSettings';
@@ -18,15 +18,30 @@ import StockMini from '../widgets/StockMini/StockMini';
 import { saveTabDB, saveTabLS } from './MainPageUtils';
 import { apiGet } from '../utils/apiUtils';
 import { UserWidget, Widget } from '../../types';
+import { Link } from 'react-router-dom';
+import Quote from '../widgets/Quote/Quote';
+import { Toast } from '../components/base';
+import RSSReader from '../widgets/RSSReader/RSSReader';
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 export default function MainPage() {
   const [modalShowed, setModalShowed] = useState(false);
   const [tab, setTab] = useState(0);
+  const [movingToastShowed, setMovingToastShowed] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
-  const [userWidgets, setUserWidgets] = useState<any>(getLS(`userWidgets${tab}`, DefaultWidgets, true));
-  const [layout, setLayout] = useState<any>(getLS(`userLayout${tab}`, DefaultLayout, true));
+  const [userWidgets, setUserWidgets] = useState<UserWidget[]>(getLS(`userWidgets${tab}`, DefaultWidgets, true));
+  const [layout, setLayout] = useState<Layout[]>(getLS(`userLayout${tab}`, DefaultLayout, true));
+
+  const [layouts, setLayouts] = useState<Layouts>({
+    xl: layout,
+    lg: layout,
+    md: layout,
+    sm: layout,
+    xs: layout,
+    xxs: layout
+  });
+  const publish = usePub();
 
   useEffect(() => {
     const fetchUserSettings = async () => {
@@ -39,9 +54,22 @@ export default function MainPage() {
         saveTabLS(0, newWidgets, newLayout);
         setUserWidgets(newWidgets);
         setLayout(newLayout);
-        // console.log('-- isReady', data);
       }
-      setIsReady(true);
+      // TODO: This is a Hack: Grid didn't load col 4, force it to reload col 4.
+      setTimeout(() => {
+        setLayouts({});
+        setTimeout(() => {
+          setLayouts({
+            xl: layout,
+            lg: layout,
+            md: layout,
+            sm: layout,
+            xs: layout,
+            xxs: layout
+          });
+          setIsReady(true);
+        }, 10);
+      }, 10);
     };
     fetchUserSettings();
   }, []);
@@ -49,28 +77,72 @@ export default function MainPage() {
 
   useSub(PubSubEvent.Delete, async (wid: string) => {
     if (confirm('Delete this widget?') === true) {
-      const newLayout = layout.filter((item: any) => item.i !== wid);
-      const newUserWidgets = userWidgets.filter((item: UserWidget) => item.wid !== wid);
-      setLayout([...newLayout]);
-      setUserWidgets([...newUserWidgets]);
-      saveTabLS(tab, newUserWidgets, newLayout);
-      deleteSettings(wid);
+      // console.log('> layout', layout, userWidgets, wid);
+      await deleteSettings(wid);
+      setUserWidgets((userWidgets: UserWidget[]) => [...userWidgets].filter((item: UserWidget) => item.wid !== wid));
+      setLayout((layout: Layout[]) => [...layout].filter((item: Layout) => item.i !== wid));
+      // this triggers onLayoutChange => save Widgets & Layout
     }
+  });
+
+  useSub(PubSubEvent.MovingToast, ({ isMoving }: { isMoving: boolean }) => {
+    setMovingToastShowed(isMoving);
   });
 
   const addWidget = (widget: Widget | null) => {
     setModalShowed(false);
-    // console.log('widget', widget);
     if (widget) {
       const wid = widget?.info?.wid + '-' + generateWID();
       userWidgets.push({
         wid
       });
-      layout.push({ i: wid, x: 0, y: 0, w: 1, h: 1 });
-      setLayout(layout);
-      saveTabLS(tab, userWidgets, layout);
+      const newLayoutItem: Layout = { i: wid, x: 1, y: 1, w: widget?.info?.w ?? 1, h: widget?.info?.h ?? 1 };
+      // console.log('newLayoutItem', newLayoutItem);
+
+      const newLayout = [...layout];
+      newLayout.push(newLayoutItem);
+
+      setLayout(() => newLayout);
+      setLayouts({
+        xl: newLayout,
+        lg: newLayout,
+        md: newLayout,
+        sm: newLayout,
+        xs: newLayout,
+        xxs: newLayout
+      });
+      // saveTabLS(tab, userWidgets, newLayout);
+      // console.log('added', userWidgets, newLayout);
     }
   };
+
+  const onLayoutChange =
+    // useCallback(
+    (currentLayout: ReactGridLayout.Layout[], allLayouts: Layouts) => {
+      if (isReady) {
+        saveTabLS(tab, userWidgets, currentLayout);
+        saveTabDB(tab, userWidgets, currentLayout);
+
+        // TODO: HACK: for some reason, layout item's h was set to 1 at some point => change them back to 2
+        currentLayout.forEach((item: Layout) => {
+          if (item.i.startsWith('embed-') || item.i.startsWith('stock-') || item.i.startsWith('toggl-')) {
+            item.h = 2;
+          }
+        });
+        setLayout(currentLayout);
+        setLayouts({
+          xl: currentLayout,
+          lg: currentLayout,
+          md: currentLayout,
+          sm: currentLayout,
+          xs: currentLayout,
+          xxs: currentLayout
+        });
+        // console.log('--- currentLayout', currentLayout, allLayouts, isReady);
+      }
+    };
+  // , []);
+
   return (
     <ProtectedPage>
       <div
@@ -79,117 +151,151 @@ export default function MainPage() {
       //   backgroundSize: 'cover'
       // }}
       >
-        {isReady && userWidgets.length > 0 && layout.length > 0 && (
-          // <GridLayout
-          //   draggableHandle=".draggableHandle"
-          //   className="layout"
-          //   layout={layout}
-          //   cols={4}
-          //   rowHeight={200}
-          //   width={1600}
-          //   margin={[20, 20]}
-          //   onLayoutChange={(layout) => {
-          //     saveTabLS(tab, userWidgets, layout);
-          //     saveTabDB(tab, userWidgets, layout);
-          //   }}
-          //   isResizable={false}
-          // >
-          <ResponsiveGridLayout
-            draggableHandle=".draggableHandle"
-            className="layout"
-            // layout={layout}
-            layouts={{ lg: layout }}
-            // cols={4}
-            breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-            cols={{ lg: 4, md: 3, sm: 2, xs: 1, xxs: 1 }}
-            rowHeight={200}
-            width={1600}
-            margin={[20, 20]}
-            onLayoutChange={(layout) => {
-              saveTabLS(tab, userWidgets, layout);
-              saveTabDB(tab, userWidgets, layout);
-            }}
-            isResizable={false}
-          >
-            {userWidgets.map((widget: Widget, idx: number) => {
-              const wid = widget?.wid ?? '';
-              const type = wid.split('-')[0];
-              const cn = ``;
-              switch (type) {
-                case 'weather':
-                  return (
-                    <div key={wid} className={cn}>
-                      <Weather key={`${wid}-main`} wid={wid} defaultCity="New York" />
-                    </div>
-                  );
-                case 'airq':
-                  return (
-                    <div key={wid} className={cn}>
-                      <AirQuality key={`${wid}-main`} wid={wid} />
-                    </div>
-                  );
-                case 'embed':
-                  return (
-                    <div key={wid} className={cn} data-grid={{ x: 2, y: 0, w: 1, h: 2 }}>
-                      <Embed key={`${wid}-main`} wid={wid} />
-                    </div>
-                  );
-                case 'lofi':
-                  return (
-                    <div key={wid} className={cn}>
-                      <LofiPlayer key={`${wid}-main`} wid={wid} />
-                    </div>
-                  );
-                case 'note':
-                  return (
-                    <div key={wid} className={cn}>
-                      <Note key={`${wid}-main`} wid={wid} />
-                    </div>
-                  );
-                case 'stock':
-                  return (
-                    <div key={wid} className={cn}>
-                      <StockChart key={`${wid}-main`} wid={wid} symbol="SPY" />
-                    </div>
-                  );
-                case 'stockmini':
-                  return (
-                    <div key={wid} className={cn}>
-                      <StockMini key={`${wid}-main`} wid={wid} symbol="SPY" />
-                    </div>
-                  );
-                case 'toggl':
-                  return (
-                    <div key={wid} className={cn} data-grid={{ x: 0, y: 0, w: 1, h: 2 }}>
-                      <Toggl key={`${wid}-main`} wid={wid} />
-                    </div>
-                  );
-                case 'BREAK':
-                  return (
-                    <div key={idx}>
-                      <div key={`${idx}-main`} className="basis-full"></div>
-                    </div>
-                  );
-              }
-            })}
-          </ResponsiveGridLayout>
-        )}
+        <ResponsiveGridLayout
+          draggableHandle=".draggableHandle"
+          className="layout"
+          // layout={layout}
+          // layouts={{ xl: layout, lg: layout, md: layout, sm: layout, xs: layout, xxs: layout }}
+          layouts={layouts}
+          onBreakpointChange={(newBreakpoint, newCols) => {
+            // console.log('onBreakpointChange', newBreakpoint, newCols);
+            // setLayouts({ ...layouts });
+          }}
+          // cols={4}
+          breakpoints={{ xl: 1500, lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+          cols={{ xl: 4, lg: 3, md: 2, sm: 2, xs: 1, xxs: 1 }}
+          rowHeight={200}
+          // width={1600}
+          margin={[20, 20]}
+          onLayoutChange={onLayoutChange}
+          isResizable={false}
+        >
+          {userWidgets.map((widget: UserWidget, idx: number) => {
+            const wid = widget?.wid ?? '';
+            const type = wid.split('-')[0];
+            const cn = ``;
+            switch (type) {
+              case 'weather':
+                return (
+                  <div key={wid} className={cn}>
+                    <Weather key={`${wid}-main`} wid={wid} />
+                  </div>
+                );
+              case 'airq':
+                return (
+                  <div key={wid} className={cn}>
+                    <AirQuality key={`${wid}-main`} wid={wid} />
+                  </div>
+                );
+              case 'embed':
+                return (
+                  <div key={wid} className={cn}>
+                    <Embed key={`${wid}-main`} wid={wid} />
+                  </div>
+                );
+              case 'lofi':
+                return (
+                  <div key={wid} className={cn}>
+                    <LofiPlayer key={`${wid}-main`} wid={wid} />
+                  </div>
+                );
+              case 'note':
+                return (
+                  <div key={wid} className={cn}>
+                    <Note key={`${wid}-main`} wid={wid} />
+                  </div>
+                );
+              case 'quote':
+                return (
+                  <div key={wid} className={cn}>
+                    <Quote key={`${wid}-main`} wid={wid} />
+                  </div>
+                );
+              case 'rssreader':
+                return (
+                  <div key={wid} className={cn}>
+                    <RSSReader key={`${wid}-main`} wid={wid} />
+                  </div>
+                );
+              case 'stock':
+                return (
+                  <div key={wid} className={cn}>
+                    <StockChart key={`${wid}-main`} wid={wid} symbol="SPY" />
+                  </div>
+                );
+              case 'stockmini':
+                return (
+                  <div key={wid} className={cn}>
+                    <StockMini key={`${wid}-main`} wid={wid} symbol="SPY" />
+                  </div>
+                );
+              case 'toggl':
+                return (
+                  <div key={wid} className={cn}>
+                    <Toggl key={`${wid}-main`} wid={wid} />
+                  </div>
+                );
+              case 'BREAK':
+                return (
+                  <div key={idx}>
+                    <div key={`${idx}-main`} className="basis-full"></div>
+                  </div>
+                );
+            }
+          })}
+        </ResponsiveGridLayout>
       </div>
 
       <div>
-        <button className="btn ml-4 mb-4" onClick={() => setModalShowed(true)}>
+        <button className="btn mt-4 ml-4 mb-4" onClick={() => setModalShowed(true)}>
           Add Widget
         </button>
       </div>
 
       <footer className="ml-4 mt-2 text-sm">
         Dashb.io -{' '}
+        <Link to="/more" className="link-minor">
+          Dashboard Examples
+        </Link>
+        {' - '}
         <a href="https://github.com/ngduc/dashb" target="_blank" className="link-minor">
-          Read more on Github
+          Github
         </a>
+        {' - '}
+        <Link to="/terms-of-service" className="link-minor">
+          Terms
+        </Link>
+        {' - '}
+        <span>
+          <span>To store your layout & widgets: </span>
+          <a href="#" className="link-minor" onClick={() => publish(PubSubEvent.SignIn, {})}>
+            Sign in
+          </a>
+        </span>
       </footer>
 
       {modalShowed && <AddWidgetModal onCancel={() => setModalShowed(false)} onConfirm={addWidget} />}
+
+      {movingToastShowed && (
+        <Toast
+          content={
+            <>
+              <div>
+                Drag & Drop the widgets to move them or{' '}
+                <span
+                  role="button"
+                  className="link-minor underline"
+                  onClick={() => publish(PubSubEvent.Moving, { stop: true })}
+                >
+                  Cancel moving
+                </span>
+              </div>
+            </>
+          }
+          success
+          onDismiss={() => setMovingToastShowed(false)}
+        />
+      )}
     </ProtectedPage>
   );
 }

@@ -46,8 +46,8 @@ export default function LofiPlayer({ wid }: Props) {
     <Widget
       wid={wid}
       schema={json.schema}
-      w={1}
-      h={1}
+      w={json.info.w}
+      h={json.info.h}
       cn="text-center"
       onSettings={({ settings }) => {
         setCurrentUrl(settings?.url ?? '');

@@ -7,10 +7,18 @@ export type WidgetSettingsProps = {
   onSubmit: (settings: KeyValueString) => void;
 };
 
+type WidgetInfo = {
+  wid: string;
+  name: string;
+  thumbnail: string;
+  w: number;
+  h: number;
+};
+
 export type Widget = {
   wid?: string;
-  info?: any;
-  schema?: any;
+  info: WidgetInfo;
+  schema: { [key: string]: any };
 };
 
 export type UserWidget = {

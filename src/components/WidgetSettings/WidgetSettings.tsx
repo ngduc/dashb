@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAppContext } from '../../hooks/useAppContext';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { RiDragMove2Fill } from 'react-icons/ri';
 import { PubSubEvent, usePub } from '../../hooks/usePubSub';
@@ -11,9 +10,10 @@ type Props = {
   wid: string;
   schema: any;
   onSubmit: (data: any) => void;
+  onCancel: () => void;
 };
 
-export default function WidgetSettings({ wid, schema, onSubmit }: Props) {
+export default function WidgetSettings({ wid, schema, onSubmit, onCancel }: Props) {
   const {
     register,
     handleSubmit,
@@ -54,6 +54,7 @@ export default function WidgetSettings({ wid, schema, onSubmit }: Props) {
               {...register(key)}
               name={key}
               autoFocus={!!field.autoFocus}
+              placeholder={field.placeholder}
               onChange={handleInputChange}
               defaultValue={settings?.key}
             />
@@ -68,6 +69,7 @@ export default function WidgetSettings({ wid, schema, onSubmit }: Props) {
               {...register(key)}
               name={key}
               autoFocus={!!field.autoFocus}
+              placeholder={field.placeholder}
               onChange={handleInputChange}
               className="text-white w-full p-1"
               rows={4}
@@ -85,7 +87,7 @@ export default function WidgetSettings({ wid, schema, onSubmit }: Props) {
               name={key}
               onChange={handleInputChange}
               className="text-gray-400"
-              defaultValue={settings?.key}
+              defaultValue={settings?.key ?? field?.defaultValue}
             >
               {/* Options for select dropdown */}
               {field.options.map((opt: any) => {
@@ -123,30 +125,46 @@ export default function WidgetSettings({ wid, schema, onSubmit }: Props) {
   };
 
   return (
-    <form className="" onSubmit={handleSubmit(onFormSubmit)}>
+    <form className="text-sm" onSubmit={handleSubmit(onFormSubmit)}>
       {Object.entries(schema).map(([key, field]) => {
         return renderFormControl(key, field);
       })}
-      <button type="submit" className="btn mt-2">
-        Submit
-      </button>
-      <button
-        type="button"
-        className="btn ml-2"
-        onClick={() => {
-          publish(PubSubEvent.Delete, wid);
-        }}
-      >
-        Delete
-      </button>
+
+      <div className="flex items-center justify-between mt-2">
+        <div className="">
+          <button type="submit" className="btn">
+            Submit
+          </button>
+          <button className="btn ml-2" onClick={onCancel}>
+            Cancel
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            className="btn ml-2 mr-6"
+            onClick={() => {
+              publish(PubSubEvent.Delete, wid);
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
     </form>
   );
 }
 
 export function MoverIcon() {
+  const publish = usePub();
   return (
-    <span className="absolute right-2 bottom-6 cursor-pointer z-10 opacity-60 hover:opacity-100 text-gray-500">
-      <RiDragMove2Fill className="draggableHandle mb-2" />
+    <span
+      className="absolute right-2 bottom-6 cursor-pointer z-10 opacity-60 hover:opacity-100 text-gray-500"
+      onClick={() => {
+        publish(PubSubEvent.Moving, {});
+      }}
+    >
+      <RiDragMove2Fill className="mb-2" />
     </span>
   );
 }

@@ -10,11 +10,11 @@ import { useAppContext } from '../../hooks/useAppContext';
 
 type Props = {
   wid: string;
-  defaultCity: string;
 };
 
-export default function Weather({ wid, defaultCity }: Props) {
-  const { jwtToken } = useAppContext();
+const DefaultCity = 'New York';
+
+export default function Weather({ wid }: Props) {
   const [weatherData, setWeatherdData] = useState<any>({ ready: false });
 
   async function search(city: string) {
@@ -38,11 +38,11 @@ export default function Weather({ wid, defaultCity }: Props) {
     <Widget
       wid={wid}
       schema={json.schema}
-      w={1}
-      h={1}
+      w={json.info.w}
+      h={json.info.h}
       cn="Weather"
       onSettings={({ settings }) => {
-        search(settings?.city ?? defaultCity);
+        search(settings?.city ?? DefaultCity);
       }}
       render={({ settings }) => {
         // console.log('settings', settings);

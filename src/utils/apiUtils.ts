@@ -4,6 +4,7 @@ import qs from 'query-string';
 import { UI_API_BASE } from './constants';
 import { getLS } from './appUtils';
 
+// v6: 2023-11: fixed getAuthHeader, params.headers;
 // v5: 2023-10: add options for apiPost, apiDelete; add getAuthHeader;
 // v4: 2023-09: in url: use '@' for UI_API_BASE
 // v3: 2022-03: use SWR, useFetch hook
@@ -17,13 +18,14 @@ const axiosApi: AxiosInstance = axios.create({
   headers: {}
 });
 
-function getAuthHeader(noAuth: boolean | undefined) {
+function getAuthHeader(params?: ApiParams) {
   const token = getLS('tk', '', false);
-  if (!token || noAuth === true) {
+  if (!token || params?.noAuth === true) {
     return {};
   }
   return {
-    authorization: `Bearer ${token}`
+    authorization: `Bearer ${token}`,
+    ...(params?.options?.headers ?? {})
   };
 }
 
@@ -63,7 +65,7 @@ export const apiGet = async (path: string, params?: ApiParams) => {
     const { data, status } = await axiosApi({
       url: path.startsWith('http') ? path : url,
       method: 'GET',
-      headers: path.startsWith('http') ? {} : getAuthHeader(params?.noAuth),
+      headers: path.startsWith('http') ? {} : getAuthHeader(params),
       ...params?.options
     });
     cache[url] = { content: { data, status } }; // cache output
@@ -85,7 +87,7 @@ export const apiPost = async (path: string, params?: ApiParams) => {
     const { data, status } = await axiosApi({
       url,
       method: 'POST',
-      headers: path.startsWith('http') ? {} : getAuthHeader(params?.noAuth),
+      headers: path.startsWith('http') ? {} : getAuthHeader(params),
       data: params?.payload,
       ...params?.options
     });
@@ -106,10 +108,10 @@ export const apiDelete = async (path: string, params?: ApiParams) => {
     const obj = {
       url,
       method: 'DELETE',
-      headers: path.startsWith('http') ? {} : getAuthHeader(params?.noAuth),
+      headers: path.startsWith('http') ? {} : getAuthHeader(params),
       ...params?.options
     };
-    console.log('obj', obj);
+    // console.log('obj', obj);
     const { data, status } = await axiosApi(obj);
     return { data, status };
   } catch (err: any) {

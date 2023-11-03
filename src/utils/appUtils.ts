@@ -1,3 +1,5 @@
+import { WidgetHeight } from './constants';
+
 export function getLS(key: string, defaultValue: any, parseJson = false) {
   let value = localStorage.getItem(key);
   if (value === 'undefined') {
@@ -37,4 +39,13 @@ export function shortUid() {
 // 6 char uuid, source: https://stackoverflow.com/a/6248722
 export function generateWID() {
   return shortUid();
+}
+
+export function hToPx(h: number) {
+  return WidgetHeight * h + (h > 1 ? 10 * h : 0);
+}
+
+export function widToName(wid: string) {
+  const widgetType: string = wid.split('-')[0];
+  return widgetType;
 }

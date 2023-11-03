@@ -56,7 +56,7 @@ export default function AppHeader() {
   return (
     <header
       key={mainKey}
-      className="py-4 flex items-center justify-between border-b border-gray-100 font-medium text-lg"
+      className="py-4 flex items-center justify-between border-b border-gray-50 font-medium text-lg"
     >
       <h1 className={`ml-2 cursor-pointer flex items-center`} onClick={() => navigate('/')}>
         <span className="text-3xl ml-2 mr-2 lg:block hidden">

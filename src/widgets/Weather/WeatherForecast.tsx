@@ -6,7 +6,6 @@ import { apiGet } from '../../utils/apiUtils';
 import { cToF } from './weatherUtils';
 
 export default function WeatherForecast(props: any) {
-  const { jwtToken } = useAppContext();
   let [loaded, setLoaded] = useState(false);
   let [forecast, setForecast] = useState<any>(null);
   const [hourlyData, setHourlyData] = useState<any>(null);
@@ -24,7 +23,7 @@ export default function WeatherForecast(props: any) {
     setForecast(data.data.daily);
 
     const arr: any = [];
-    data.data.hourly.forEach((item: any, idx: number) => {
+    (data?.data?.hourly ?? []).forEach((item: any, idx: number) => {
       if (idx % 3 === 0) {
         arr.push(item);
       }
@@ -59,9 +58,11 @@ export default function WeatherForecast(props: any) {
               return (
                 <span key={idx}>
                   {new Date(item.dt * 1000)
-                    .toLocaleString()
+                    .toLocaleString('en-US')
                     .replace(/:00:00/g, '')
-                    .split(',')[1] +
+                    .split(',')
+                    .slice(1) // example: '10/31/2023, 07:00:00 PM' => '07 PM'
+                    .join(' ') +
                     ' ' +
                     (props?.settings?.useFahrenheit ? Math.round(cToF(item.temp)) : Math.round(item.temp)) +
                     '°'}
