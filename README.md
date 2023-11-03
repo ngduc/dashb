@@ -2,7 +2,7 @@
 
 Dashb.io - Minimalist's Dashboard and Widgets.
 
-[Dashboard Examples](./examples.md)
+[Dashboard Examples](./documentation/examples.md)
 
 ## Scripts
 
