@@ -17,17 +17,20 @@ $ npm run dev
 
 - [x] AirQuality
 - [x] Embed
-  - Insert any page to your dashboard. (using iframe)
+  - Insert any page to your dashboard using iframe. (news, forum posts..)
 - [x] LofiPlayer
   - Lofi music player.
 - [x] Notes
   - Text note with multiple tabs.
+- [x] Quotes
+- [x] RSS Reader
+  - Fetch news from RSS sources.
 - [x] StockChart
 - [x] StockMini
 - [x] Toggl
+  - Bar chart for Toggl to know where you spent your time.
 - [x] Weather
   - Daily, hourly weather information.
-- [x] Quotes
 - [ ] Markdown Notes
 
 ### ...and your own Widget!
