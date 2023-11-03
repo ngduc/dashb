@@ -1,3 +1,7 @@
 # Examples
 
-<img src="dashb-example-01.png">
+- Dashboard with TODO notes, Weather, Air Quality, Stock index, News, Lofi music player
+  <img src="dashb-example-01.png">
+
+- Dashboard to monior Stock prices, Trading notes
+  <img src="dashb-example-02.png">
