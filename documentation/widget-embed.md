@@ -10,3 +10,7 @@ Copy an URL below and paste it in the Embed's setting:
 - News sources: (use these URLs in the widget settings)
   - Hacker News - Weekly: https://hn.algolia.com/?dateRange=pastWeek&page=0&prefix=false&query=&sort=byPopularity&type=story
   - Reddit Webdev Top Posts: https://feed.mikle.com/widget/v2/164076/?preloader-text=Loading&
+
+Embed Calendar:
+
+- How to Embed Google Calendar: https://www.howtogeek.com/781315/how-to-embed-google-calendar-on-a-website-or-blog/
