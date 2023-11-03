@@ -2,7 +2,9 @@
   "info": {
     "wid": "weather",
     "name": "Weather",
-    "thumbnail": "https://i.ibb.co/b2PMvkj/localhost-5300-1.png"
+    "thumbnail": "/thumbnail-weather.png",
+    "w": 1,
+    "h": 1
   },
   "schema": {
     "city": {
@@ -20,6 +22,7 @@
     "days": {
       "label": "Days",
       "type": "select",
+      "defaultValue": "4",
       "options": [
         {
           "value": "1",

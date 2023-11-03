@@ -2,7 +2,9 @@
   "info": {
     "wid": "lofi",
     "name": "Lofi Music",
-    "thumbnail": "https://i.ibb.co/qM18zb6/localhost-5300-2.png"
+    "thumbnail": "/thumbnail-lofi.png",
+    "w": 1,
+    "h": 1
   },
   "schema": {
     "urls": {

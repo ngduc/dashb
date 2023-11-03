@@ -1,8 +1,8 @@
 {
   "info": {
-    "wid": "embed",
-    "name": "Embed",
-    "thumbnail": "/thumbnail-embed.png",
+    "wid": "rssreader",
+    "name": "RSS Reader",
+    "thumbnail": "/thumbnail-rssreader.png",
     "w": 1,
     "h": 2
   },
@@ -10,7 +10,7 @@
     "url": {
       "label": "URL",
       "type": "text",
-      "placeholder": "https://web-url...",
+      "placeholder": "https://rss-url...",
       "autoFocus": true,
       "className": "w-full",
       "validation": {

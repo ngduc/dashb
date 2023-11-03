@@ -2,12 +2,15 @@
   "info": {
     "wid": "stock",
     "name": "Stock Chart",
-    "thumbnail": "https://i.ibb.co/fxFNMm3/localhost-5300-3.png"
+    "thumbnail": "/thumbnail-stock.png",
+    "w": 1,
+    "h": 2
   },
   "schema": {
     "symbol": {
       "label": "Symbol",
       "type": "text",
+      "placeholder": "Stock Symbol",
       "autoFocus": true,
       "validation": {
         "required": "Symbol is required",

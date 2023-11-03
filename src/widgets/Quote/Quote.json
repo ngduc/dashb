@@ -1,0 +1,16 @@
+{
+  "info": {
+    "wid": "quote",
+    "name": "Quote",
+    "thumbnail": "/thumbnail-quote.png",
+    "w": 1,
+    "h": 1
+  },
+  "schema": {
+    "italic": {
+      "label": "Italic",
+      "type": "checkbox"
+    }
+  }
+
+}

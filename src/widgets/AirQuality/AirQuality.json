@@ -1,7 +1,10 @@
 {
   "info": {
     "wid": "airq",
-    "name": "Air Quality"
+    "name": "Air Quality",
+    "thumbnail": "",
+    "w": 1,
+    "h": 1
   },
   "schema": {
     "city": {

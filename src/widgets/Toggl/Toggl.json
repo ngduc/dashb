@@ -2,7 +2,9 @@
   "info": {
     "wid": "toggl",
     "name": "Toggl",
-    "thumbnail": ""
+    "thumbnail": "",
+    "w": 1,
+    "h": 2
   },
   "schema": {
     "apiKey": {

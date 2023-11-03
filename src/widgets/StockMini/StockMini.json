@@ -2,12 +2,15 @@
   "info": {
     "wid": "stockmini",
     "name": "Stock Chart Mini",
-    "thumbnail": "https://i.ibb.co/vYqD3Lj/localhost-5300.png"
+    "thumbnail": "/thumbnail-stockmini.png",
+    "w": 1,
+    "h": 1
   },
   "schema": {
     "symbol": {
       "label": "Symbol",
       "type": "text",
+      "placeholder": "Stock Symbol",
       "autoFocus": true,
       "validation": {
         "required": "Symbol is required",
