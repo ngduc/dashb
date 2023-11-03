@@ -16,7 +16,7 @@ $ npm run dev
 ## Widgets
 
 - [x] AirQuality
-- [x] Embed
+- [x] Embed - [Docs](./documentation/widget-embed.md)
   - Insert any page to your dashboard using iframe. (news, forum posts..)
 - [x] LofiPlayer
   - Lofi music player.
@@ -36,13 +36,6 @@ $ npm run dev
 ### ...and your own Widget!
 
 Create your own widget and publish it for everyone to use. Please open one PR per widget.
-
-#### Embed widget
-
-- Some examples: embed news, forum posts, any web page, etc.
-- News sources: (use these URLs in the widget settings)
-  - Hacker News - Weekly: https://hn.algolia.com/?dateRange=pastWeek&page=0&prefix=false&query=&sort=byPopularity&type=story
-  - Reddit Webdev Top Posts: https://feed.mikle.com/widget/v2/164076/?preloader-text=Loading&
 
 #### Note widget
 
