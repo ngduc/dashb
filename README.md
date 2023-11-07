@@ -15,7 +15,8 @@ $ npm run dev
 
 ## Widgets
 
-- [x] AirQuality
+- [x] Air Quality
+- [x] Analog Clocks - support multiple clocks and timezones.
 - [x] Embed - [Docs](./documentation/widget-embed.md)
   - Insert any page to your dashboard using iframe. (news, forum posts..)
 - [x] LofiPlayer
