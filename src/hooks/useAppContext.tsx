@@ -1,4 +1,5 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
+import { KeyValueString } from '../../types';
 
 export type User = {
   email: string;
@@ -14,6 +15,8 @@ export type AppContextType = {
   login?: () => void;
   logout?: () => void;
   loading?: boolean;
+  tabSettings?: any;
+  setTabSettings?: any;
 };
 const AuthContext = createContext<AppContextType>({});
 
@@ -27,6 +30,7 @@ export const AuthProvider = ({ children }: any) => {
   const [jwtToken, setJwtToken] = useState(localStorage.getItem('tk') ?? '');
   const [authed, setAuthed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [tabSettings, setTabSettings] = useState<KeyValueString>({});
 
   useEffect(() => {
     // if (!authed) {
@@ -98,7 +102,21 @@ export const AuthProvider = ({ children }: any) => {
   return (
     // Using the provider so that ANY component in our application can
     // use the values that we are sending.
-    <AuthContext.Provider value={{ jwtToken, setJwtToken, user, authed, setAuthed, setUser, login, logout, loading }}>
+    <AuthContext.Provider
+      value={{
+        jwtToken,
+        setJwtToken,
+        user,
+        authed,
+        setAuthed,
+        setUser,
+        login,
+        logout,
+        loading,
+        tabSettings,
+        setTabSettings
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

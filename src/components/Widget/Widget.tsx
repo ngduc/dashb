@@ -7,6 +7,7 @@ import { WidgetWidth } from '../../utils/constants';
 import { hToPx, widToName } from '../../utils/appUtils';
 import { PubSubEvent, usePub, useSub } from '../../hooks/usePubSub';
 import { isIframeWidget } from '../../widgets';
+import { useAppContext } from '../../hooks/useAppContext';
 
 type Props = {
   wid: string;
@@ -25,6 +26,7 @@ type Props = {
 };
 
 export default function Widget({ wid, schema, w, h, cn, render, onSettings }: Props) {
+  const { tabSettings } = useAppContext();
   const [moverShowed, setMoverShowed] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
@@ -50,13 +52,15 @@ export default function Widget({ wid, schema, w, h, cn, render, onSettings }: Pr
       });
     }
   });
+  const movingCss = `border-[2px] border-yellow-700 draggableHandle cursor-move`;
+  const borderCss = `${
+    isMoving ? movingCss : `border-[1px] border-gray-50 ${tabSettings?.border ?? ''} ${tabSettings?.borderColor ?? ''}`
+  }`;
 
   return (
     <div
       // border-2 border-gray-100 rounded-md
-      className={`relative overflow-hidden overflow-y-scroll ${
-        isMoving ? 'border-[2px] border-yellow-700 draggableHandle cursor-move' : 'border-[1px] border-gray-50'
-      } ${cn ?? ''}`}
+      className={`relative overflow-hidden overflow-y-scroll ${borderCss} ${cn ?? ''}`}
       style={{ width: WidgetWidth * w, height: hToPx(h) }}
     >
       <div
@@ -69,7 +73,7 @@ export default function Widget({ wid, schema, w, h, cn, render, onSettings }: Pr
         }}
       >
         {moverShowed && <MoverIcon />}
-        <SettingsIcon onClick={toggleSettings} />
+        <SettingsIcon wid={wid} onClick={toggleSettings} />
       </div>
 
       {settingsShowed ? (

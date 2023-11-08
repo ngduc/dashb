@@ -42,8 +42,14 @@ const ProtectedPage = (props: any) => {
     setJwtToken ? setJwtToken(authRes.jwtToken) : '';
     // console.log('user', user);
     publish(PubSubEvent.SignInDone, user);
+
+    // TODO: improve this without reloading page
+    if (!isAnonymous) {
+      window.location.reload();
+    }
   };
 
+  // function to show Google OAuth Popup for Sign-in
   const googleOAuthPopupLogin = useGoogleLogin({
     onSuccess: ({ code }) => {
       const settingJson = {

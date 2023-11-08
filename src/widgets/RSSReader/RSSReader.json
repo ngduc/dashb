@@ -1,16 +1,16 @@
 {
   "info": {
     "wid": "rssreader",
-    "name": "RSS Reader",
+    "name": "RSS News Reader",
     "thumbnail": "/thumbnail-rssreader.png",
     "w": 1,
     "h": 2
   },
   "schema": {
     "url": {
-      "label": "URL",
+      "label": "RSS Feed URL",
       "type": "text",
-      "placeholder": "https://rss-url...",
+      "placeholder": "https://rss-feed-url...",
       "autoFocus": true,
       "className": "w-full",
       "validation": {
@@ -20,6 +20,11 @@
           "message": "URL should have at least 1 character"
         }
       }
+    },
+    "examples": {
+      "label": "Note sure what to use?",
+      "type": "label",
+      "defaultValue": "Find RSS Feed URL Examples here: <a href='https://github.com/ngduc/dashb/blob/main/documentation/widget-rssreader.md' target='_blank' class='link-minor'>Examples</a>"
     }
   }
 }

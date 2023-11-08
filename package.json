@@ -29,6 +29,7 @@
     "react-hook-form": "^7.47.0",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.17.0",
+    "react-tooltip": "^5.22.0",
     "react-tradingview-embed": "^3.0.6",
     "recharts": "^2.9.0",
     "swr": "^2.2.4"

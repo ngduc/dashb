@@ -2,7 +2,7 @@ import { memo, useMemo, useState } from 'react';
 import { MiniChart, SymbolOverview } from 'react-tradingview-embed';
 import json from './StockMini.json';
 import Widget from '../../components/Widget/Widget';
-import { WidgetWidth } from '../../utils/constants';
+import { WidgetHeight, WidgetWidth } from '../../utils/constants';
 import { PubSubEvent, useSub } from '../../hooks/usePubSub';
 
 type Props = {
@@ -24,6 +24,7 @@ export default function StockMini({ wid, symbol }: Props) {
         key={wid + '-' + theme}
         widgetProps={{
           width: WidgetWidth,
+          height: WidgetHeight - 2,
           symbol: currentSymbol,
           colorTheme: theme
         }}

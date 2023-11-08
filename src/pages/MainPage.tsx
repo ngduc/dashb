@@ -22,24 +22,34 @@ import { Link } from 'react-router-dom';
 import Quote from '../widgets/Quote/Quote';
 import { Toast } from '../components/base';
 import RSSReader from '../widgets/RSSReader/RSSReader';
+import { isDoubleHeightWidget } from '../widgets';
+import AnalogClock from '../widgets/AnalogClock/AnalogClock';
+import { useAppContext } from '../hooks/useAppContext';
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 export default function MainPage() {
+  const { tabSettings, setTabSettings } = useAppContext();
   const [modalShowed, setModalShowed] = useState(false);
   const [tab, setTab] = useState(0);
+  // const [tabSettings, setTabSettings] = useState<any>({});
   const [movingToastShowed, setMovingToastShowed] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
   const [userWidgets, setUserWidgets] = useState<UserWidget[]>(getLS(`userWidgets${tab}`, DefaultWidgets, true));
   const [layout, setLayout] = useState<Layout[]>(getLS(`userLayout${tab}`, DefaultLayout, true));
+  const [currentBreakpoint, setCurrentBreakpoint] = useState('');
+
+  const getLSLayout = (size: string) => {
+    return getLS(`userLayout${tab}${size}`, DefaultLayout, true);
+  };
 
   const [layouts, setLayouts] = useState<Layouts>({
-    xl: layout,
-    lg: layout,
-    md: layout,
-    sm: layout,
-    xs: layout,
-    xxs: layout
+    xl: getLSLayout('xl'),
+    lg: getLSLayout('lg'),
+    md: getLSLayout('md'),
+    sm: getLSLayout('sm'),
+    xs: getLSLayout('xs'),
+    xxs: getLSLayout('xxs')
   });
   const publish = usePub();
 
@@ -48,12 +58,15 @@ export default function MainPage() {
       setIsReady(false);
       const token = localStorage.getItem('tk') ?? '';
       if (token) {
-        const { data } = await apiGet('/api/user/settings', {});
+        // timestamp for caching many same requests at the same time (up to the same second)
+        const timestamp = new Date().toISOString().split('.')[0]; // 2023-11-03T15:06:24 (removed nanosecs)
+        const { data } = await apiGet(`/api/user/settings?ts=${timestamp}`, {});
         const newWidgets = (data?.userWidgets ?? []).length > 0 ? data.userWidgets : DefaultWidgets;
         const newLayout = (data?.userLayout ?? []).length > 0 ? data.userLayout : DefaultLayout;
         saveTabLS(0, newWidgets, newLayout);
         setUserWidgets(newWidgets);
         setLayout(newLayout);
+        setTabSettings(data?.tab ?? {});
       }
       // TODO: This is a Hack: Grid didn't load col 4, force it to reload col 4.
       setTimeout(() => {
@@ -119,25 +132,34 @@ export default function MainPage() {
   const onLayoutChange =
     // useCallback(
     (currentLayout: ReactGridLayout.Layout[], allLayouts: Layouts) => {
+      // resized done (from XL > LG):
+      // onLayoutChange XL => onBreakpointChange LG (if changed => load & setLayout LG) => onLayoutChange LG
+
+      // resized back (LG > XL)
+      // onLayoutChange LG => onBreakpointChange XL  => onLayoutChange XL
       if (isReady) {
-        saveTabLS(tab, userWidgets, currentLayout);
-        saveTabDB(tab, userWidgets, currentLayout);
+        if (movingToastShowed) {
+          // only save layout when moving widgets
+          saveTabLS(tab, userWidgets, currentLayout);
+          saveTabDB(tab, userWidgets, currentLayout);
+          localStorage.setItem(`userLayout${tab}${currentBreakpoint}`, JSON.stringify(currentLayout));
+        }
 
         // TODO: HACK: for some reason, layout item's h was set to 1 at some point => change them back to 2
         currentLayout.forEach((item: Layout) => {
-          if (item.i.startsWith('embed-') || item.i.startsWith('stock-') || item.i.startsWith('toggl-')) {
+          if (isDoubleHeightWidget(item.i)) {
             item.h = 2;
           }
         });
-        setLayout(currentLayout);
-        setLayouts({
-          xl: currentLayout,
-          lg: currentLayout,
-          md: currentLayout,
-          sm: currentLayout,
-          xs: currentLayout,
-          xxs: currentLayout
-        });
+        // setLayout(currentLayout);
+        // setLayouts({
+        //   xl: currentLayout,
+        //   lg: currentLayout,
+        //   md: currentLayout,
+        //   sm: currentLayout,
+        //   xs: currentLayout,
+        //   xxs: currentLayout
+        // });
         // console.log('--- currentLayout', currentLayout, allLayouts, isReady);
       }
     };
@@ -158,6 +180,19 @@ export default function MainPage() {
           // layouts={{ xl: layout, lg: layout, md: layout, sm: layout, xs: layout, xxs: layout }}
           layouts={layouts}
           onBreakpointChange={(newBreakpoint, newCols) => {
+            if (newBreakpoint !== currentBreakpoint) {
+              // if changed => save LG; load & setLayout LG
+              setLayout(getLSLayout(newBreakpoint));
+              setLayouts({
+                xl: getLSLayout('xl'),
+                lg: getLSLayout('lg'),
+                md: getLSLayout('md'),
+                sm: getLSLayout('sm'),
+                xs: getLSLayout('xs'),
+                xxs: getLSLayout('xxs')
+              });
+            }
+            setCurrentBreakpoint(newBreakpoint);
             // console.log('onBreakpointChange', newBreakpoint, newCols);
             // setLayouts({ ...layouts });
           }}
@@ -179,6 +214,12 @@ export default function MainPage() {
                 return (
                   <div key={wid} className={cn}>
                     <Weather key={`${wid}-main`} wid={wid} />
+                  </div>
+                );
+              case 'analogclock':
+                return (
+                  <div key={wid} className={cn}>
+                    <AnalogClock key={`${wid}-main`} wid={wid} />
                   </div>
                 );
               case 'airq':
@@ -281,13 +322,13 @@ export default function MainPage() {
           content={
             <>
               <div>
-                Drag & Drop the widgets to move them or{' '}
+                <div>Drag & Drop widgets to move them</div>
                 <span
                   role="button"
                   className="link-minor underline"
                   onClick={() => publish(PubSubEvent.Moving, { stop: true })}
                 >
-                  Cancel moving
+                  I'm done moving
                 </span>
               </div>
             </>
@@ -295,6 +336,36 @@ export default function MainPage() {
           success
           onDismiss={() => setMovingToastShowed(false)}
         />
+      )}
+
+      {/* source: https://codepen.io/mattmarble/pen/qBdamQz */}
+      {tabSettings?.effect === 'STARFIELD' && (
+        <>
+          <div id="stars"></div>
+          <div id="stars2"></div>
+          <div id="stars3"></div>
+        </>
+      )}
+
+      {/* source: https://www.sliderrevolution.com/resources/css-animated-background/ */}
+      {tabSettings?.effect === 'FIREFLY' && (
+        <>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+          <div className="firefly"></div>
+        </>
       )}
     </ProtectedPage>
   );

@@ -15,7 +15,10 @@ export default function Toggl({ wid }: Props) {
       h={json.info.h}
       cn=""
       onSettings={() => {}}
-      render={() => {
+      render={({ settings }) => {
+        if (!settings?.apiKey) {
+          return <div className="p-2">Toggl - Requires API Key (set it in Settings)</div>;
+        }
         return <TogglProjectBarChart wid={wid} />;
       }}
     />

@@ -62,7 +62,7 @@
       "type": "checkbox"
     },
     "useFahrenheit": {
-      "label": "Use Fahrenheit?",
+      "label": "Use Fahrenheit",
       "type": "checkbox"
     }
   }

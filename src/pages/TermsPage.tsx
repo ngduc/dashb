@@ -1,8 +1,8 @@
-export function TermsPage() {
+export default function TermsPage() {
   return (
     <main className="relative flex min-h-screen flex-col items-center bg-white text-black">
       <div className="flex flex-col justify-between items-center mb-4 lg:w-1/2 w-full p-2">
-        <h1 className="w-full my-6 text-3xl">Terms of Service</h1>
+        <h1 className="w-full my-6 text-3xl">Terms of Service & Privacy Policy</h1>
         <pre className="whitespace-pre-wrap">
           {`From everyone at Dashb, thank you for using our products! We build them to help you do your best work. There are many users using Dashb products every day. Because we don’t know every one of our customers personally, we have to put in place some Terms of Service to help keep the ship afloat.
 
@@ -92,6 +92,43 @@ You expressly understand and agree that the Company shall not be liable, in law 
 In other words: choosing to use our Services does mean you are making a bet on us. If the bet does not work out, that’s on you, not us. We do our darnedest to be as safe a bet as possible through careful management of the business; investments in security, infrastructure, and talent; and in general giving a damn. If you choose to use our Services, thank you for betting on us.
 
 If you have a question about any of these Terms, please [contact our Support team](support@dashb.io).
+`}
+        </pre>
+      </div>
+
+      <div className="flex flex-col justify-between items-center mb-4 lg:w-1/2 w-full p-2">
+        <h1 className="w-full my-6 text-3xl">Privacy Policy</h1>
+        <pre className="whitespace-pre-wrap">
+          {`Privacy Policy
+
+This Privacy Policy explains how we collect, use, and disclose your personal information when you visit our website. By using our website, you consent to the terms of this policy.
+
+1. Information We Collect
+We may collect personal information such as your name, email address, and other contact information when you voluntarily provide it to us through our website.
+
+2. How We Use Your Information
+We use your personal information to respond to your inquiries, to provide you with information about our products and services, and to improve the content and functionality of our website.
+
+3. Cookies and Other Tracking Technologies
+We use cookies and other tracking technologies to collect information about your use of our website. This information may include your IP address, browser type, operating system, and other information about your device. We use this information to improve the content and functionality of our website and to personalize your experience.
+
+4. Sharing Your Information
+We do not sell or share your personal information with third parties except as required by law or as necessary to fulfill your requests.
+
+5. Security
+We take reasonable measures to protect your personal information from unauthorized access, disclosure, or use.
+
+6. Copyright Infringements
+If you believe material infringes your copyright, notify us using the contact info below. We'll send a copy to the person responsible. Be aware that false claims may result in liability. Consider consulting an attorney if unsure about infringement.
+
+7. Children's Privacy
+Our website is not intended for children under the age of 13. We do not knowingly collect personal information from children under the age of 13.
+
+8. Changes to this Privacy Policy
+We may update this Privacy Policy from time to time. We will post the updated policy on our website and will indicate the date of the most recent update. It is your responsibility to check this Privacy Policy periodically for changes.
+
+9. Contact Us
+If you have any questions or concerns about this Privacy Policy, please [contact our Support team](support@dashb.io).
 `}
         </pre>
       </div>

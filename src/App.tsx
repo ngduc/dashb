@@ -1,12 +1,14 @@
 import nightwind from 'nightwind/helper';
-import { BrowserRouter } from 'react-router-dom';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import ProtectedRoute from './components/app/ProtectedRoute';
 import AppHeader from './components/AppHeader';
-import './App.css';
 import MainPage from './pages/MainPage';
-import MorePage from './pages/MorePage';
-import { TermsPage } from './pages/TermsPage';
+import { Suspense, lazy } from 'react';
+import './App.css';
+
+const SettingPage = lazy(() => import('./pages/SettingPage'));
+const MorePage = lazy(() => import('./pages/MorePage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
 
 const isDarkMode = (localStorage.getItem('nightwind-mode') ?? 'dark') === 'dark';
 if (isDarkMode) {
@@ -21,8 +23,30 @@ export default () => {
 
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/more" element={<MorePage />} />
-          <Route path="/terms-of-service" element={<TermsPage />} />
+          <Route
+            path="/more"
+            element={
+              <Suspense fallback={<></>}>
+                <MorePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <Suspense fallback={<></>}>
+                <SettingPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/terms-of-service"
+            element={
+              <Suspense fallback={<></>}>
+                <TermsPage />
+              </Suspense>
+            }
+          />
 
           <Route path="profile" element={<ProtectedRoute>Protected Profile</ProtectedRoute>} />
         </Routes>

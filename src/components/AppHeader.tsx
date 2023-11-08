@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import nightwind from 'nightwind/helper';
-import { getLS, logOut } from '../utils/appUtils';
+import { getLS, getLSUser, logOut } from '../utils/appUtils';
 import { PubSubEvent, usePub, useSub } from '../hooks/usePubSub';
 import { Dropdown } from './base';
 import { useState } from 'react';
@@ -46,12 +46,14 @@ export default function AppHeader() {
   const publish = usePub();
   const [mainKey, setMainKey] = useState('main');
   const [tutorialShowed, setTutorialShowed] = useState(getLS('tutorialShowed', ''));
-
-  const lsUser = getLS('user', {}, true);
+  const lsUser = getLSUser();
+  const isAnonymousUser = !lsUser.name || lsUser.name === 'User' || lsUser.name === 'LOCAL';
+  const isLoggedIn = !isAnonymousUser && lsUser?.name;
 
   useSub(PubSubEvent.SignInDone, (user: any) => {
     setMainKey(user.id);
   });
+  // console.log('isAnonymousUser', isAnonymousUser);
 
   return (
     <header
@@ -75,7 +77,7 @@ export default function AppHeader() {
       </div>
 
       <div className="flex items-center">
-        <Dropdown label={lsUser.name ?? 'User'} className="text-sm" ulClassName="ml-[-40px]">
+        <Dropdown label={isAnonymousUser ? 'Profile' : lsUser.name} className="text-sm" ulClassName="ml-[-40px]">
           <button
             className="text-sm link-minor w-28 bg-gray-100 hover:bg-gray-300 py-2 px-4 block whitespace-no-wrap cursor-pointer"
             onClick={() => setTutorialShowed('')}
@@ -84,16 +86,26 @@ export default function AppHeader() {
           </button>
           <button
             className="text-sm link-minor w-28 bg-gray-100 hover:bg-gray-300 py-2 px-4 block whitespace-no-wrap cursor-pointer"
-            onClick={() => publish(PubSubEvent.SignIn, {})}
+            onClick={() => navigate('/settings')}
           >
-            Sign in
+            Settings
           </button>
-          <button
-            className="text-sm link-minor w-28 bg-gray-100 hover:bg-gray-300 py-2 px-4 block whitespace-no-wrap cursor-pointer"
-            onClick={() => logOut()}
-          >
-            Log out
-          </button>
+          {!isLoggedIn && (
+            <button
+              className="text-sm link-minor w-28 bg-gray-100 hover:bg-gray-300 py-2 px-4 block whitespace-no-wrap cursor-pointer"
+              onClick={() => publish(PubSubEvent.SignIn, {})}
+            >
+              Sign in
+            </button>
+          )}
+          {!isAnonymousUser && isLoggedIn && (
+            <button
+              className="text-sm link-minor w-28 bg-gray-100 hover:bg-gray-300 py-2 px-4 block whitespace-no-wrap cursor-pointer"
+              onClick={() => logOut()}
+            >
+              Log out
+            </button>
+          )}
         </Dropdown>
         <button
           className="text-lg mr-4"

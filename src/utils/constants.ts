@@ -2,11 +2,6 @@ import { KeyValueString } from '../../types';
 
 export const UI_API_BASE = import.meta.env.VITE_UI_API_BASE;
 
-export const getSettingsApiUrl = (tab: number, wid: string) => {
-  const widgetType: string = wid.split('-')[0];
-  return `/api/${widgetType}/settings?wid=` + wid + `&tab=${tab}`;
-};
-
 export const WidgetWidth = 360;
 export const WidgetHeight = 200;
 
@@ -28,6 +23,9 @@ export const DefaultWidgets = [
   },
   {
     wid: 'quote-01'
+  },
+  {
+    wid: 'analogclock-01'
   }
 ];
 export const DefaultLayout = [
@@ -36,5 +34,6 @@ export const DefaultLayout = [
   { i: 'rssreader-01', x: 1, y: 0, w: 1, h: 2 },
   { i: 'lofi-01', x: 0, y: 0, w: 1, h: 1 },
   { i: 'note-01', x: 0, y: 0, w: 1, h: 1 },
-  { i: 'quote-01', x: 2, y: 0, w: 1, h: 1 }
+  { i: 'analogclock-01', x: 2, y: 0, w: 1, h: 1 },
+  { i: 'quote-01', x: 2, y: 1, w: 1, h: 1 }
 ];

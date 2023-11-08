@@ -1,0 +1,33 @@
+{
+  "info": {
+    "wid": "analogclock",
+    "name": "Analog Clock",
+    "thumbnail": "/thumbnail-analog-clock.png",
+    "w": 1,
+    "h": 1
+  },
+  "schema": {
+    "title1": {
+      "label": "Clock 1",
+      "type": "text",
+      "placeholder": "City Name",
+      "autoFocus": true
+    },
+    "hourDiff1": {
+      "label": "Hour Difference",
+      "type": "text",
+      "placeholder": "0"
+    },
+    "title2": {
+      "label": "Clock 2",
+      "placeholder": "City Name",
+      "type": "text"
+    },
+    "hourDiff2": {
+      "label": "Hour Difference",
+      "type": "text",
+      "placeholder": "-7"
+    }
+  }
+
+}

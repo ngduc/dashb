@@ -1,4 +1,5 @@
 import { Widget } from '../../types';
+import jsonAnalogClock from './AnalogClock/AnalogClock.json';
 import jsonAirQuality from './AirQuality/AirQuality.json';
 import jsonEmbed from './Embed/Embed.json';
 import jsonLofiPlayer from './LofiPlayer/LofiPlayer.json';
@@ -14,7 +15,14 @@ export function isIframeWidget(wid: string) {
   return wid.startsWith('stock') || wid.startsWith('embed') || wid.startsWith('rssreader');
 }
 
+export function isDoubleHeightWidget(wid: string) {
+  return (
+    wid.startsWith('embed-') || wid.startsWith('stock-') || wid.startsWith('toggl-') || wid.startsWith('rssreader-')
+  );
+}
+
 export const widgetList: Widget[] = [
+  jsonAnalogClock,
   jsonAirQuality,
   jsonEmbed,
   jsonLofiPlayer,

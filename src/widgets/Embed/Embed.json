@@ -20,6 +20,11 @@
           "message": "URL should have at least 1 character"
         }
       }
+    },
+    "examples": {
+      "label": "Note sure what to use?",
+      "type": "label",
+      "defaultValue": "Find an URL for Embed here: <a href='https://github.com/ngduc/dashb/blob/main/documentation/widget-embed.md' target='_blank' class='link-minor'>Examples</a>"
     }
   }
 }

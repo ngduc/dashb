@@ -3,8 +3,11 @@ import { useForm } from 'react-hook-form';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { RiDragMove2Fill } from 'react-icons/ri';
 import { PubSubEvent, usePub } from '../../hooks/usePubSub';
-import './form.css';
 import { useWidgetSettings } from '../../hooks/useWidgetSettings';
+import { Tooltip } from 'react-tooltip';
+import './form.css';
+import { getLS } from '../../utils/appUtils';
+import WidgetSettingsTutorial from './WidgetSettingsTutorial';
 
 type Props = {
   wid: string;
@@ -75,6 +78,14 @@ export default function WidgetSettings({ wid, schema, onSubmit, onCancel }: Prop
               rows={4}
               defaultValue={settings?.key}
             />
+            {errors && errors[key] && <span>{`${errors[key]?.message}`}</span>}
+          </div>
+        );
+      case 'label':
+        return (
+          <div key={key}>
+            <label className="mr-2">{field.label}</label>
+            <div dangerouslySetInnerHTML={{ __html: field?.defaultValue }}></div>
             {errors && errors[key] && <span>{`${errors[key]?.message}`}</span>}
           </div>
         );
@@ -159,8 +170,9 @@ export function MoverIcon() {
   const publish = usePub();
   return (
     <span
-      className="absolute right-2 bottom-6 cursor-pointer z-10 opacity-60 hover:opacity-100 text-gray-500"
-      onClick={() => {
+      className="fixed left-[362px] bottom-6 cursor-pointer z-10 opacity-60 hover:opacity-100 text-gray-500"
+      onMouseDown={() => {
+        // don't use onClick as some users try to 'drag' this icon instead of clicking on it
         publish(PubSubEvent.Moving, {});
       }}
     >
@@ -169,10 +181,18 @@ export function MoverIcon() {
   );
 }
 
-export function SettingsIcon({ onClick }: { onClick: () => void }) {
+export function SettingsIcon({ wid, onClick }: { wid: string; onClick: () => void }) {
   return (
-    <span className="absolute right-2 bottom-2 cursor-pointer z-10 opacity-60 hover:opacity-100 text-gray-500">
-      <AiOutlineSetting width={32} height={32} onClick={onClick} />
-    </span>
+    <>
+      <span
+        className="fixed left-[362px] bottom-2 cursor-pointer z-10 opacity-60 hover:opacity-100 text-gray-500"
+        data-tooltip-id="setting-tutorial-tooltip"
+        data-tooltip-place="right"
+      >
+        <AiOutlineSetting width={32} height={32} onClick={onClick} />
+      </span>
+
+      {wid.startsWith('weather') && <WidgetSettingsTutorial />}
+    </>
   );
 }

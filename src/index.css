@@ -1,3 +1,6 @@
+@import './bg-firefly.css';
+@import './bg-starfield.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -77,4 +80,9 @@ input {
 .underlineLink:hover::after,
 .underlineLink:focus::after {
   transform: scale(1);
+}
+
+/* Tutorial tooltip in WidgetSettings.tsx */
+#setting-tutorial-tooltip {
+  z-index: 1;
 }
